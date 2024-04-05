@@ -5,14 +5,14 @@ Vagrant_API_Version ="2"
 Vagrant.configure(Vagrant_API_Version) do |config|
 
   # WAS-server
-  config.vm.define:"WAS" do |cfg|
+  config.vm.define:"WAS-01" do |cfg|
     cfg.vm.box = "centos/7"
 	  cfg.vm.provider:virtualbox do |vb|
-      vb.name="WAS"
+      vb.name="WAS-01"
       vb.customize ["modifyvm", :id, "--cpus",1]
       vb.customize ["modifyvm", :id, "--memory",1024]
     end
-    cfg.vm.host_name="WAS"
+    cfg.vm.host_name="WAS-01"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "public_network", ip: "192.168.111.21"
     cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"

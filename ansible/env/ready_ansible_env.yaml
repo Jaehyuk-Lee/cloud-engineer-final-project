@@ -9,18 +9,18 @@
         dest=/etc/hosts
         content="
           192.168.111.2 ansible-server
-          192.168.111.11 Web01
-          192.168.111.21 WAS01
-          192.168.111.31 DB01"
+          192.168.111.11 web-01
+          192.168.111.21 WAS-01
+          192.168.111.31 DB-01"
 
     - name: Add "/etc/ansible/hosts"
       blockinfile: |
         dest=/etc/ansible/hosts
         content="
-          [Web]
+          [web]
 
           [WAS]
-          WAS01
+          WAS-01
           [DB]
           "
 
