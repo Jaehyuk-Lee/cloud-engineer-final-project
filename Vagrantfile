@@ -29,6 +29,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "public_network", ip: "192.168.111.2"
     cfg.vm.network "forwarded_port", guest: 22, host: 19210, auto_correct: false, id: "ssh"
+    # env
     cfg.vm.provision "shell", path: "scripts/bootstrap.sh"
     cfg.vm.provision "file", source: "ansible/env/ready_ansible_env.yaml", destination: "ready_ansible_env.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook ready_ansible_env.yaml"
@@ -36,8 +37,10 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", inline: "ansible-playbook auto_known_host.yaml", privileged: false
     cfg.vm.provision "file", source: "ansible/env/auto_authorized_keys.yaml", destination: "auto_authorized_keys.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook auto_authorized_keys.yaml --extra-vars 'ansible_ssh_pass=vagrant'", privileged: false
+    # common
     cfg.vm.provision "file", source: "ansible/common/install_docker.yaml", destination: "install_docker.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker.yaml", privileged: false
+    # WAS
     cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_container.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
   end
