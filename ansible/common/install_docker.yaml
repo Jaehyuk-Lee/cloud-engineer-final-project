@@ -1,0 +1,53 @@
+---
+- name: Install Docker on CentOS 7
+  hosts: WAS
+  become: true
+
+  tasks:
+    - name: Install yum-utils, device-mapper-persistent-data, lvm2 package
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+
+    - name: Add Docker repository
+      yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - $basearch
+        baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+        gpgcheck: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
+        enabled: yes
+
+    - name: Install Docker CE
+      yum:
+        name: docker-ce
+        state: present
+
+    - name: Enable and start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    # Requirements to use Docker with Ansible
+    - name: Install EPEL repository, pip package
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - epel-release
+        - python-pip
+
+    - name: Upgrade pip
+      pip:
+        name: pip==20.3
+        extra_args: --upgrade
+
+    - name: Install Docker Python library
+      pip:
+        name: docker
+        state: present

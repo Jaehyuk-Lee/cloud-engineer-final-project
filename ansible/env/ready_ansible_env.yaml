@@ -1,0 +1,30 @@
+---
+- name: Setup for the Ansible's Enviroment
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Add "/etc/hosts"
+      blockinfile: |
+        dest=/etc/hosts
+        content="
+          192.168.111.2 ansible-server
+          192.168.111.11 Web01
+          192.168.111.21 WAS01
+          192.168.111.31 DB01"
+
+    - name: Add "/etc/ansible/hosts"
+      blockinfile: |
+        dest=/etc/ansible/hosts
+        content="
+          [Web]
+
+          [WAS]
+          WAS01
+          [DB]
+          "
+
+    - name: Install sshpass for Authentication
+      yum:
+        name: sshpass
+        state: present

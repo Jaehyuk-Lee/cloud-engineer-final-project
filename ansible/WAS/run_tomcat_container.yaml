@@ -1,0 +1,46 @@
+---
+- name: Run Tomcat Docker container
+  hosts: WAS
+  become: true
+
+  tasks:
+    - name: Pull Tomcat Docker image
+      docker_image:
+        name: tomcat:9.0.87-jre11-temurin-jammy
+        state: present
+        source: pull
+
+    - name: Run Tomcat Docker container
+      docker_container:
+        name: my-tomcat-container
+        image: tomcat:9.0.87-jre11-temurin-jammy
+        state: started
+        ports:
+          - "8080:8080"
+
+    # Shell command로 Tomcat Docker 실행하기
+
+    # - name: Check Tomcat Docker container status (shell command)
+    #   shell:
+    #     cmd: docker container ps | grep tomcat:9.0.87-jre11-temurin-jammy
+    #   register: tomcat_container_status
+    #   failed_when: tomcat_container_status.rc != 1 and tomcat_container_status.rc != 0
+
+    # - name: Run Tomcat Docker container (shell command)
+    #   shell:
+    #     cmd: docker run -d -p 8080:8080 tomcat:9.0.87-jre11-temurin-jammy
+    #   when: tomcat_container_status.rc != 0
+
+    # Start firewall daemon
+    - name: Start firewall daemon
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Open port 8080
+      firewalld:
+        port: 8080/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
