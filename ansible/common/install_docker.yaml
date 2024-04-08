@@ -1,8 +1,8 @@
 ---
 - name: Install Docker on CentOS 7
   hosts:
-    - web-01
-    # - WAS
+    - web
+    - WAS
   become: true
 
   tasks:

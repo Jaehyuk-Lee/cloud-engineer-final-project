@@ -19,7 +19,6 @@
         content="
           [web]
           web-01
-          192.168.111.11
           [WAS]
           WAS-01
           [DB]
