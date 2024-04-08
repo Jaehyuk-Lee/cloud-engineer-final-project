@@ -20,20 +20,20 @@ Vagrant.configure(Vagrant_API_Version) do |config|
   # end
 
   # DB-server
-  # config.vm.define:"DB-01" do |cfg|
-  #   cfg.vm.box = "centos/7"
-	#   cfg.vm.provider:virtualbox do |vb|
-  #     vb.name="DB-01"
-  #     vb.customize ["modifyvm", :id, "--cpus",2]
-  #     vb.customize ["modifyvm", :id, "--memory",2048]
-  #   end
-  #   cfg.vm.host_name="DB-01"
-  #   cfg.vm.synced_folder ".", "/vagrant", disabled: true
-  #   cfg.vm.network "public_network", ip: "192.168.111.31"
-  #   cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
-  #   cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: true, id: "mysql"
-  #   cfg.vm.provision "shell", path: "C:/Users/Swordbill/Downloads/f_project/cloud-engineer-final-project/scripts/bash_ssh_conf_CentOS.sh"
-  #   cfg.vm.provision "file", source: "C:/Users/Swordbill/Downloads/f_project/cloud-engineer-final-project/ansible/DB/DB_data/data.sql", destination: "data.sql"
+  config.vm.define:"DB-01" do |cfg|
+    cfg.vm.box = "centos/7"
+	  cfg.vm.provider:virtualbox do |vb|
+      vb.name="DB-01"
+      vb.customize ["modifyvm", :id, "--cpus",2]
+      vb.customize ["modifyvm", :id, "--memory",2048]
+    end
+    cfg.vm.host_name="DB-01"
+    cfg.vm.synced_folder ".", "/vagrant", disabled: true
+    cfg.vm.network "public_network", ip: "192.168.111.31"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
+    cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: true, id: "mysql"
+    cfg.vm.provision "shell", path: "C:/Users/Swordbill/Downloads/f_project/cloud-engineer-final-project/scripts/bash_ssh_conf_CentOS.sh"
+    cfg.vm.provision "file", source: "C:/Users/Swordbill/Downloads/f_project/cloud-engineer-final-project/ansible/DB/DB_data/data.sql", destination: "data.sql"
   # end
   # Monitering-Server
   config.vm.define:"MS-01" do |cfg|
