@@ -1,0 +1,10 @@
+---
+- name: Install Git on CentOS 7
+  hosts: WAS
+  become: true
+
+  tasks:
+    - name: Install Git
+      yum:
+        name: git
+        state: present
