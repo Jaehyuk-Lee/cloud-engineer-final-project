@@ -1,2 +1,9 @@
 .vagrant
 .vscode/settings.json
+
+# Terraform .gitignore
+Terraform/Serverinfra/.terraform/
+
+Terraform/Serverinfra/.terraform.lock.hcl
+
+Terraform/Serverinfra/terraform.tfvars
