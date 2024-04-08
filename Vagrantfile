@@ -46,7 +46,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.network "private_network", ip: "192.168.111.2"
     cfg.vm.network "forwarded_port", guest: 22, host: 19210, auto_correct: false, id: "ssh"
     # env
-    cfg.vm.provision "shell", path: "scripts/bootstrap.sh" 
+    cfg.vm.provision "shell", path: "scripts/bootstrap.sh"
     cfg.vm.provision "file", source: "ansible/env/ready_ansible_env.yaml", destination: "ready_ansible_env.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook ready_ansible_env.yaml"
     cfg.vm.provision "file", source: "ansible/env/auto_known_host.yaml", destination: "auto_known_host.yaml"

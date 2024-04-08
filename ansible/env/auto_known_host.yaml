@@ -1,6 +1,6 @@
 ---
 - hosts:
-    - web-01
+    - web
     # - WAS
   connection: local
   serial: 1
