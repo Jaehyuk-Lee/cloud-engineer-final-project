@@ -1,7 +1,7 @@
 ---
 - hosts:
     - web
-    # - WAS
+    - WAS
   connection: local
   serial: 1
   gather_facts: no

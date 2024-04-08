@@ -12,14 +12,14 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       vb.customize ["modifyvm", :id, "--cpus",1]
       vb.customize ["modifyvm", :id, "--memory",1024]
     end
-    cfg.vm.host_name="web-01.mma.com"
+    cfg.vm.host_name="web-01"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "private_network", ip: "192.168.111.11"
     cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
     cfg.vm.provision "shell", path: "Scripts/bash_ssh_conf_CentOS.sh"
   end
 
-  WAS-server
+  # WAS-server
   config.vm.define:"WAS-01" do |cfg|
     cfg.vm.box = "centos/7"
 	  cfg.vm.provider:virtualbox do |vb|
