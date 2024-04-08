@@ -19,7 +19,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", path: "Scripts/bash_ssh_conf_CentOS.sh"
   end
 
-  # WAS-server
+  WAS-server
   config.vm.define:"WAS-01" do |cfg|
     cfg.vm.box = "centos/7"
 	  cfg.vm.provider:virtualbox do |vb|
@@ -61,8 +61,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", inline: "ansible-playbook install_web_nginx.yaml", privileged: false
     cfg.vm.provision "file", source: "ansible/web/install_docker_nginx.yaml", destination: "install_docker_nginx.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker_nginx.yaml", privileged: false
-    cfg.vm.provision "file", source: "ansible/web/install_https_web.yaml", destination: "install_https_web.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook install_https_web.yaml", privileged: false
     # WAS
     cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_container.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
