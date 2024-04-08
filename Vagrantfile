@@ -14,9 +14,10 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     end
     cfg.vm.host_name="WAS-01"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "public_network", ip: "192.168.111.21"
+    cfg.vm.network "private_network", ip: "192.168.111.21"
     cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
+    cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
   end
 
   # Ansible-Server
@@ -27,7 +28,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     end
     cfg.vm.host_name="ansible-server"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "public_network", ip: "192.168.111.2"
+    cfg.vm.network "private_network", ip: "192.168.111.2"
     cfg.vm.network "forwarded_port", guest: 22, host: 19210, auto_correct: false, id: "ssh"
     # env
     cfg.vm.provision "shell", path: "scripts/bootstrap.sh"
