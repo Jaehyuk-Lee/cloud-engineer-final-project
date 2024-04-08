@@ -9,7 +9,7 @@
         dest=/etc/hosts
         content="
           192.168.111.2 ansible-server
-          192.168.111.11 web-01
+          192.168.111.11 Web-01
           192.168.111.21 WAS-01
           192.168.111.31 DB-01"
 
@@ -17,14 +17,19 @@
       blockinfile: |
         dest=/etc/ansible/hosts
         content="
-          [web]
+          [Web]
 
           [WAS]
-          WAS-01
+
           [DB]
+
+          [MS]
+          MS-01
           "
 
     - name: Install sshpass for Authentication
       yum:
         name: sshpass
         state: present
+
+

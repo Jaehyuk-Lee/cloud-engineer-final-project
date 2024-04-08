@@ -1,5 +1,5 @@
 ---
-- hosts: WAS
+- hosts: MS-01
   gather_facts: no
 
   tasks:
