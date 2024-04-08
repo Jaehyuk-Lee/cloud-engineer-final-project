@@ -4,21 +4,11 @@
   become: true
 
   tasks:
-    # vagrant up 처음에만 빌드하고
-    # /home/vagrant/docker/webapp에 변경사항이 생겨도
-    # 이후에는 빌드하지 않아서 항상 빌드하도록 셸 명령어로 변경
-
-    # - name: Build Docker image
-    #   docker_image:
-    #     name: my-tomcat-image
-    #     build:
-    #       path: /home/vagrant/docker
-    #   when: true
-    #   check_mode: false
-
     - name: Build Docker image
-      shell:
-        cmd: docker build -t my-tomcat-image /home/vagrant/docker
+      docker_image:
+        name: my-tomcat-image
+        build:
+          path: /home/vagrant/docker
 
     - name: Run Tomcat Docker container
       docker_container:
