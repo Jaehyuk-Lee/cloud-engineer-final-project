@@ -1,0 +1,17 @@
+---
+- name: Install Nginx in Docker container
+  hosts: web-01
+  become: yes
+  tasks:
+    - name: Pull Nginx Docker image
+      docker_image:
+        name: nginx:1.18-alpine
+        source: pull
+
+    - name: Run Nginx Docker container
+      docker_container:
+        name: my_nginx
+        image: nginx:1.18-alpine
+        state: started
+        ports:
+          - "8081:80"
