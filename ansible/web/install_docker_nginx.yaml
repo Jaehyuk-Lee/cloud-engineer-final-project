@@ -1,6 +1,6 @@
 ---
 - name: Install Nginx in Docker container
-  hosts: web-01
+  hosts: web
   become: yes
   tasks:
     - name: Pull Nginx Docker image

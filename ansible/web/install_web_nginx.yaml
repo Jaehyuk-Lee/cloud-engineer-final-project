@@ -1,6 +1,6 @@
 ---
 - name: Configure Nginx on Web Server
-  hosts: web-01
+  hosts: web
   become: yes
   tasks:
     - name: Install Nginx
