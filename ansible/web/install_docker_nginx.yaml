@@ -5,13 +5,13 @@
   tasks:
     - name: Build Nginx Docker image
       docker_image:
-        name: my_nginx_image
+        name: my-nginx-image
         source: pull
 
     - name: Run Nginx Docker container
       docker_container:
-        name: my_nginx_container
-        image: my_nginx_image
+        name: my-nginx-container
+        image: my-nginx-image
         state: started
         ports:
           - "8081:80"
