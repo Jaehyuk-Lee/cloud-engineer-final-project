@@ -2,6 +2,7 @@
 - hosts:
     - web
     - WAS
+    - DB
   connection: local
   serial: 1
   gather_facts: no

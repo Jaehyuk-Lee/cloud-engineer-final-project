@@ -22,6 +22,9 @@
           [WAS]
           WAS-01
           [DB]
+          DB-01
+          [MS]
+          MS-01
           "
 
     - name: Install sshpass for Authentication
