@@ -3,15 +3,15 @@
   hosts: web
   become: yes
   tasks:
-    - name: Pull Nginx Docker image
+    - name: Build Nginx Docker image
       docker_image:
-        name: nginx:1.18-alpine
+        name: my_nginx_image
         source: pull
 
     - name: Run Nginx Docker container
       docker_container:
-        name: my_nginx
-        image: nginx:1.18-alpine
+        name: my_nginx_container
+        image: my_nginx_image
         state: started
         ports:
           - "8081:80"
