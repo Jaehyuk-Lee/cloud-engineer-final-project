@@ -51,22 +51,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
   # end
-  # Monitering-Server
-  config.vm.define:"MS-01" do |cfg|
-    cfg.vm.box = "centos/7"
-	  cfg.vm.provider:virtualbox do |vb|
-      vb.name="MS-01"
-      vb.customize ["modifyvm", :id, "--cpus",2]
-      vb.customize ["modifyvm", :id, "--memory",2048]
-    end
-    cfg.vm.host_name="MS-01"
-    cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "public_network", ip: "192.168.111.41"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
-    cfg.vm.network "forwarded_port", guest: 9093, host: 9093
-    cfg.vm.network "forwarded_port", guest: 9090, host: 9090
-    cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-  end
 
   # Ansible-Server
   config.vm.define:"ansible-server" do |cfg|
@@ -102,7 +86,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "file", source: "DB/tasks/install.yaml", destination: "install.yaml"
     cfg.vm.provision "file", source: "DB/templates/my.cnf.j2", destination: "my.cnf"
     cfg.vm.provision "file", source: "DB/DB_data/data.sql", destination: "data.sql"
-    cfg.vm.provision "shell", inline: "ansible-playbook maria_db.yaml", privileged: falsentainer.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook maria_db.yaml", privileged: false
   end
 end
