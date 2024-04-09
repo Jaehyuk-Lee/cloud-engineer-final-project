@@ -8,8 +8,8 @@
       blockinfile: |
         dest=/etc/hosts
         content="
-          192.168.111.2 ansible-server
-          192.168.111.11 Web-01
+          192.168.111.2 ansible-server.mma.com ansible-server
+          192.168.111.11 web-01.mma.com web-01
           192.168.111.21 WAS-01
           192.168.111.31 DB-01"
 
@@ -17,12 +17,12 @@
       blockinfile: |
         dest=/etc/ansible/hosts
         content="
-          [Web]
-
+          [web]
+          web-01
           [WAS]
 
           [DB]
-
+          DB-01
           [MS]
           MS-01
           "

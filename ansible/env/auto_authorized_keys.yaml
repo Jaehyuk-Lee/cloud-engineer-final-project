@@ -1,21 +1,24 @@
 ---
-- hosts: MS-01
+- hosts:
+    - web
+    - WAS
+    - DB
   gather_facts: no
 
   tasks:
-  - name: Run ssh-keygen
-    connection: local
-    command: "ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ''"
-    ignore_errors: yes
-    run_once: true
+    - name: Run ssh-keygen
+      connection: local
+      command: "ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ''"
+      ignore_errors: yes
+      run_once: true
 
-  - name: Read id_rsa.pub
-    connection: local
-    command: "cat ~/.ssh/id_rsa.pub"
-    register: id_pub
-    run_once: true
+    - name: Read id_rsa.pub
+      connection: local
+      command: "cat ~/.ssh/id_rsa.pub"
+      register: id_pub
+      run_once: true
 
-  - name: Remote lineinfile for authorized_keys
-    lineinfile:
-      dest: /home/vagrant/.ssh/authorized_keys
-      line: "{{ id_pub.stdout }}"
+    - name: Remote lineinfile for authorized_keys
+      lineinfile:
+        dest: /home/vagrant/.ssh/authorized_keys
+        line: "{{ id_pub.stdout }}"
