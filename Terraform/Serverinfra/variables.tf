@@ -9,3 +9,5 @@ variable "PRI_SUB_3_A_CIDR" {}
 variable "PRI_SUB_4_B_CIDR" {}
 variable "PRI_SUB_5_A_CIDR" {}
 variable "PRI_SUB_6_B_CIDR" {}
+variable "PRI_SUB_7_A_CIDR" {}
+variable "PRI_SUB_8_B_CIDR" {}
