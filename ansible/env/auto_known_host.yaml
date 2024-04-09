@@ -1,18 +1,19 @@
 ---
-- hosts: WAS
+- hosts:
+    - web
+    - WAS
   connection: local
   serial: 1
   gather_facts: no
 
   tasks:
-  - name: Scan host key
-    command: /usr/bin/ssh-keyscan -t ecdsa {{ ansible_host }}
-    register: keyscan
+    - name: Scan host key
+      command: /usr/bin/ssh-keyscan -t ecdsa {{ ansible_host }}
+      register: keyscan
 
-  - name: Add host key to known_hosts
-    lineinfile:
-      name=~/.ssh/known_hosts
-      create=yes
-      line={{ item }}
-    with_items:
-    - "{{ keyscan.stdout_lines }}"
+    - name: Add host key to known_hosts
+      lineinfile: name=~/.ssh/known_hosts
+        create=yes
+        line={{ item }}
+      with_items:
+        - "{{ keyscan.stdout_lines }}"
