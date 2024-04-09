@@ -4,20 +4,21 @@ Vagrant_API_Version ="2"
 
 Vagrant.configure(Vagrant_API_Version) do |config|
 
-  # # WAS-server
-  # config.vm.define:"WAS-01" do |cfg|
-  #   cfg.vm.box = "centos/7"
-	#   cfg.vm.provider:virtualbox do |vb|
-  #     vb.name="WAS-01"
-  #     vb.customize ["modifyvm", :id, "--cpus",1]
-  #     vb.customize ["modifyvm", :id, "--memory",1024]
-  #   end
-  #   cfg.vm.host_name="WAS-01"
-  #   cfg.vm.synced_folder ".", "/vagrant", disabled: true
-  #   cfg.vm.network "public_network", ip: "192.168.111.21"
-  #   cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
-  #   cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-  # end
+  # WAS-server
+  config.vm.define:"WAS-01" do |cfg|
+    cfg.vm.box = "centos/7"
+	  cfg.vm.provider:virtualbox do |vb|
+      vb.name="WAS-01"
+      vb.customize ["modifyvm", :id, "--cpus",1]
+      vb.customize ["modifyvm", :id, "--memory",1024]
+    end
+    cfg.vm.host_name="WAS-01"
+    cfg.vm.synced_folder ".", "/vagrant", disabled: true
+    cfg.vm.network "private_network", ip: "192.168.111.21"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
+    cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
+    cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
+  end
 
   # DB-server
   config.vm.define:"DB-01" do |cfg|
@@ -60,7 +61,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     end
     cfg.vm.host_name="ansible-server"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "public_network", ip: "192.168.111.2"
+    cfg.vm.network "private_network", ip: "192.168.111.2"
     cfg.vm.network "forwarded_port", guest: 22, host: 19210, auto_correct: false, id: "ssh"
     # env
     cfg.vm.provision "shell", path: "scripts/bootstrap.sh"

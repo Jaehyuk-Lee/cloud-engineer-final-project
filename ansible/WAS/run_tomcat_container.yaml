@@ -4,16 +4,16 @@
   become: true
 
   tasks:
-    - name: Pull Tomcat Docker image
+    - name: Build Docker image
       docker_image:
-        name: tomcat:9.0.87-jre11-temurin-jammy
-        state: present
-        source: pull
+        name: my-tomcat-image
+        build:
+          path: /home/vagrant/docker
 
     - name: Run Tomcat Docker container
       docker_container:
         name: my-tomcat-container
-        image: tomcat:9.0.87-jre11-temurin-jammy
+        image: my-tomcat-image
         state: started
         ports:
           - "8080:8080"
