@@ -95,14 +95,14 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "file", source: "ansible/web/install_docker_nginx.yaml", destination: "install_docker_nginx.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker_nginx.yaml", privileged: false
     # WAS
-    cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_co
+    cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_container.yaml"
     #DB-server
-    # cfg.vm.provision "file", source: "DB/maria_db.yaml", destination: "maria_db.yaml"
-    # cfg.vm.provision "file", source: "DB/vars/main.yaml", destination: "main.yaml"
-    # cfg.vm.provision "file", source: "DB/tasks/install.yaml", destination: "install.yaml"
-    # cfg.vm.provision "file", source: "DB/templates/my.cnf.j2", destination: "my.cnf"
-    # cfg.vm.provision "file", source: "DB/DB_data/data.sql", destination: "data.sql"
-    # cfg.vm.provision "shell", inline: "ansible-playbook maria_db.yaml", privileged: falsentainer.yaml"
+    cfg.vm.provision "file", source: "DB/maria_db.yaml", destination: "maria_db.yaml"
+    cfg.vm.provision "file", source: "DB/vars/main.yaml", destination: "main.yaml"
+    cfg.vm.provision "file", source: "DB/tasks/install.yaml", destination: "install.yaml"
+    cfg.vm.provision "file", source: "DB/templates/my.cnf.j2", destination: "my.cnf"
+    cfg.vm.provision "file", source: "DB/DB_data/data.sql", destination: "data.sql"
+    cfg.vm.provision "shell", inline: "ansible-playbook maria_db.yaml", privileged: falsentainer.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
   end
 end
