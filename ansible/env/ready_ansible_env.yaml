@@ -20,7 +20,7 @@
           [web]
           web-01
           [WAS]
-
+          WAS-01
           [DB]
           DB-01
           [MS]
