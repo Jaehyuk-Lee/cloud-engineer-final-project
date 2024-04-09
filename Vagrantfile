@@ -46,7 +46,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.host_name="DB-01"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "public_network", ip: "192.168.111.31"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19213, auto_correct: false, id: "ssh"
     cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: true, id: "mysql"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
