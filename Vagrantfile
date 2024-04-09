@@ -80,7 +80,8 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker_nginx.yaml", privileged: false
     # WAS
     cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_container.yaml"
-    #DB-server
+    cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
+    # DB-server
     cfg.vm.provision "file", source: "DB/maria_db.yaml", destination: "maria_db.yaml"
     cfg.vm.provision "file", source: "DB/vars/main.yaml", destination: "main.yaml"
     cfg.vm.provision "file", source: "DB/tasks/install.yaml", destination: "install.yaml"
