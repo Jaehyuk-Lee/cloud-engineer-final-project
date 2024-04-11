@@ -51,11 +51,3 @@
     priv: "{{ mysql_user_db_name }}.*:ALL,GRANT"
     host: "%"
     state: present
-
-- name: Update MySQL configuration
-  lineinfile:
-    path: /etc/mysql/my.cnf
-    regexp: '^bind-address\s*='
-    line: "bind-address = 192.168.111.21-30"
-  notify:
-    - restart mysql
