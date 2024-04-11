@@ -53,8 +53,8 @@ module "WAS-EKS" {
   EKS_CLUSTER_ROLE_ARN = module.IAM.EKS_CLUSTER_ROLE_ARN
   PUB_SUB_1_A_ID       = module.VPC.PUB_SUB_1_A_ID
   PUB_SUB_2_B_ID       = module.VPC.PUB_SUB_2_B_ID
-  PRI_SUB_3_A_ID       = module.VPC.PRI_SUB_5_A_ID
-  PRI_SUB_4_B_ID       = module.VPC.PRI_SUB_6_B_ID
+  PRI_SUB_5_A_ID       = module.VPC.PRI_SUB_5_A_ID
+  PRI_SUB_6_B_ID       = module.VPC.PRI_SUB_6_B_ID
 }
 
 module "Web-node" {

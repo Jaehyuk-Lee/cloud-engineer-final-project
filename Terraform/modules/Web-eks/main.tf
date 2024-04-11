@@ -1,9 +1,9 @@
 
-resource "aws_eks_cluster" "eks" {
+resource "aws_eks_cluster" "web-eks" {
   # Name of the cluster.
   name = var.PROJECT_NAME
 
-  # The Amazon Resource Name (ARN) of the IAM role that provides permissions for 
+  # The Amazon Resource Name (ARN) of the IAM role that provides permissions for
   # the Kubernetes control plane to make calls to AWS API operations on your behalf
   role_arn = var.EKS_CLUSTER_ROLE_ARN
 

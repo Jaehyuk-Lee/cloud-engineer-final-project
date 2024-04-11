@@ -73,6 +73,11 @@ resource "aws_route_table_association" "pri-sub-5-a-with-Pri-RT-A" {
   route_table_id = aws_route_table.Pri-RT-A.id
 }
 
+resource "aws_route_table_association" "pri-sub-7-a-with-Pri-RT-A" {
+  subnet_id      = var.PRI_SUB_7_A_ID
+  route_table_id = aws_route_table.Pri-RT-A.id
+}
+
 
 
 # create private route table Pri-RT-B and add route through NAT-GW-B
@@ -99,3 +104,9 @@ resource "aws_route_table_association" "pri-sub-6-b-with-Pri-RT-B" {
   subnet_id      = var.PRI_SUB_6_B_ID
   route_table_id = aws_route_table.Pri-RT-B.id
 }
+
+resource "aws_route_table_association" "pri-sub-8-b-with-Pri-RT-B" {
+  subnet_id      = var.PRI_SUB_8_B_ID
+  route_table_id = aws_route_table.Pri-RT-B.id
+}
+

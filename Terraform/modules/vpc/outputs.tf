@@ -31,6 +31,15 @@ output "PRI_SUB_5_A_ID" {
 output "PRI_SUB_6_B_ID" {
   value = aws_subnet.pri-sub-6-b.id
 }
+
+output "PRI_SUB_7_A_ID" {
+  value = aws_subnet.pri-sub-7-a.id
+}
+
+output "PRI_SUB_8_B_ID" {
+  value = aws_subnet.pri-sub-8-b.id
+}
+
 output "IGW_ID" {
   value = aws_internet_gateway.internet_gateway
 }
