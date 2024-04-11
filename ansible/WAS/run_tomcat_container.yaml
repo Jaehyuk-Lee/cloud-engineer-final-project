@@ -6,9 +6,11 @@
   tasks:
     - name: Build Docker image
       docker_image:
-        name: my-tomcat-image
         build:
           path: /home/vagrant/docker
+          pull: no
+        name: my-tomcat-image
+        source: build
 
     - name: Run Tomcat Docker container
       docker_container:
