@@ -5,8 +5,12 @@
   tasks:
     - name: Build Nginx Docker image
       docker_image:
+        build:
+          path: /home/vagrant/docker
+          pull: no
+        push: no
         name: my-nginx-image
-        source: pull
+        source: build
 
     - name: Run Nginx Docker container
       docker_container:
