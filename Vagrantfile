@@ -74,8 +74,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "file", source: "ansible/common/install_docker.yaml", destination: "install_docker.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker.yaml", privileged: false
     # web
-    cfg.vm.provision "file", source: "ansible/web/install_web_nginx.yaml", destination: "install_web_nginx.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook install_web_nginx.yaml", privileged: false
     cfg.vm.provision "file", source: "ansible/web/install_docker_nginx.yaml", destination: "install_docker_nginx.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker_nginx.yaml", privileged: false
     # WAS
