@@ -19,6 +19,8 @@ resource "aws_eks_cluster" "web-eks" {
 
     # Must be in at least two different availability zones
     subnet_ids = [
+
+
       var.PUB_SUB_1_A_ID,
       var.PUB_SUB_2_B_ID,
       var.PRI_SUB_3_A_ID,
