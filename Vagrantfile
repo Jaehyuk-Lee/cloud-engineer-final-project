@@ -51,6 +51,9 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: false, id: "mysql"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
+    cfg.vm.provision "shell", inline: <<-SHELL
+      sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
+    SHELL
   end
 
   # Ansible-Server
