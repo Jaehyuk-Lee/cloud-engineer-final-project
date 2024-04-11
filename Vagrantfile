@@ -31,7 +31,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.host_name="WAS-01"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "private_network", ip: "192.168.111.21"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19212, auto_correct: false, id: "ssh"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19221, auto_correct: false, id: "ssh"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
   end
@@ -46,9 +46,9 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     end
     cfg.vm.host_name="DB-01"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "public_network", ip: "192.168.111.31"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19213, auto_correct: false, id: "ssh"
-    cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: true, id: "mysql"
+    cfg.vm.network "private_network", ip: "192.168.111.31"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19231, auto_correct: false, id: "ssh"
+    cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: false, id: "mysql"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
   end
@@ -62,7 +62,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.host_name="ansible-server"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "private_network", ip: "192.168.111.2"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19210, auto_correct: false, id: "ssh"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19202, auto_correct: false, id: "ssh"
     # env
     cfg.vm.provision "shell", path: "scripts/bootstrap.sh"
     cfg.vm.provision "file", source: "ansible/env/ready_ansible_env.yaml", destination: "ready_ansible_env.yaml"
