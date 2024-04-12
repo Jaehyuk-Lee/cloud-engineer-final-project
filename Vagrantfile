@@ -21,19 +21,23 @@ Vagrant.configure(Vagrant_API_Version) do |config|
   end
 
   # WAS-server
-  config.vm.define:"WAS-01" do |cfg|
-    cfg.vm.box = "centos/7"
-	  cfg.vm.provider:virtualbox do |vb|
-      vb.name="WAS-01"
-      vb.customize ["modifyvm", :id, "--cpus",1]
-      vb.customize ["modifyvm", :id, "--memory",1024]
+  (1..1).each do |i|
+    config.vm.define:"WAS-#{format('%02d', i)}" do |cfg|
+      cfg.vm.box = "centos/7"
+      cfg.vm.provider:virtualbox do |vb|
+        vb.name="WAS-#{format('%02d', i)}"
+        vb.customize ["modifyvm", :id, "--cpus",1]
+        vb.customize ["modifyvm", :id, "--memory",1024]
+      end
+      cfg.vm.host_name="WAS-#{format('%02d', i)}"
+      cfg.vm.synced_folder ".", "/vagrant", disabled: false
+      cfg.vm.network "private_network", ip: "192.168.111.#{i+20}"
+      cfg.vm.network "forwarded_port", guest: 22, host: 19220+i, auto_correct: false, id: "ssh"
+      cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
+      cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
+
+      cfg.vm.provision "shell", inline: "echo '192.168.111.#{i+20} WAS-#{format('%02d', i)}' >> /vagrant/tmp_hosts"
     end
-    cfg.vm.host_name="WAS-01"
-    cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "private_network", ip: "192.168.111.21"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19221, auto_correct: false, id: "ssh"
-    cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-    cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
   end
 
   # DB-server
@@ -51,6 +55,10 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: false, id: "mysql"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
+    cfg.vm.provision "file", source: "ansible/DB/templates/my.cnf.j2", destination: "my.cnf"
+    cfg.vm.provision "shell", inline: <<-SHELL
+      sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
+    SHELL
   end
 
   # Ansible-Server
@@ -71,6 +79,12 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", inline: "ansible-playbook auto_known_host.yaml", privileged: false
     cfg.vm.provision "file", source: "ansible/env/auto_authorized_keys.yaml", destination: "auto_authorized_keys.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook auto_authorized_keys.yaml --extra-vars 'ansible_ssh_pass=vagrant'", privileged: false
+
+    cfg.vm.provision "shell", inline: <<-SHELL
+      cat /vagrant/tmp_hosts >> /etc/hosts
+      rm -f /vagrant/tmp_hosts
+    SHELL
+
     # common
     cfg.vm.provision "file", source: "ansible/common/install_docker.yaml", destination: "install_docker.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker.yaml", privileged: false
@@ -86,8 +100,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "file", source: "ansible/DB/maria_db.yaml", destination: "maria_db.yaml"
     cfg.vm.provision "file", source: "ansible/DB/vars/main.yaml", destination: "main.yaml"
     cfg.vm.provision "file", source: "ansible/DB/tasks/install.yaml", destination: "install.yaml"
-    cfg.vm.provision "file", source: "ansible/DB/templates/my.cnf.j2", destination: "my.cnf"
-    cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
     cfg.vm.provision "shell", inline: "ansible-playbook maria_db.yaml", privileged: false
   end
 end

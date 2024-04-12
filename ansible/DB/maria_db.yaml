@@ -1,7 +1,15 @@
 ---
-   - hosts: DB-01
-     become: yes
-     vars_files:
-        - /home/vagrant/main.yaml
-     tasks:
-        - include: /home/vagrant/install.yaml
+- hosts: DB-01
+  become: yes
+  vars_files:
+    - /home/vagrant/main.yaml
+  tasks:
+    - include: /home/vagrant/install.yaml
+    - name: Backup existing my.cnf file
+      command: mv /etc/my.cnf /etc/my.cnf.bak
+      args:
+        creates: /etc/my.cnf.bak
+      failed_when: false
+    - name : mv my.cnf file
+      command: mv /home/vagrant/my.cnf /etc/my.cnf
+
