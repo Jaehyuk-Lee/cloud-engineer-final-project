@@ -25,6 +25,8 @@ resource "aws_eks_cluster" "web-eks" {
       var.PUB_SUB_2_B_ID,
       var.PRI_SUB_3_A_ID,
       var.PRI_SUB_4_B_ID,
+      var.PRI_SUB_5_A_ID,
+      var.PRI_SUB_6_B_ID
 
     ]
   }
