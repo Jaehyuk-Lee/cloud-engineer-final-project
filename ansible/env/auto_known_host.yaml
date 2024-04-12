@@ -3,6 +3,7 @@
     - web
     - WAS
     - DB
+    - haproxy
   connection: local
   serial: 1
   gather_facts: no

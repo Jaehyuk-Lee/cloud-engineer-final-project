@@ -4,21 +4,36 @@ Vagrant_API_Version ="2"
 
 Vagrant.configure(Vagrant_API_Version) do |config|
 
-  # Web-server
-  config.vm.define:"web-01" do |cfg|
+  config.vm.define "haproxy-server" do |cfg|
     cfg.vm.box = "centos/7"
-    cfg.vm.provider:virtualbox do |vb|
-      vb.name="web-01"
-      vb.customize ["modifyvm", :id, "--cpus",1]
-      vb.customize ["modifyvm", :id, "--memory",1024]
+    cfg.vm.provider :virtualbox do |vb|
+      vb.name = "haproxy-server"
+      vb.customize ["modifyvm", :id, "--cpus", 1]
+      vb.customize ["modifyvm", :id, "--memory", 1024]
     end
-    cfg.vm.host_name="web-01"
+    cfg.vm.hostname = "haproxy-server"
+    cfg.vm.network "private_network", ip: "192.168.111.100"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19300, auto_correct: false, id: "ssh"
+    cfg.vm.provision "shell", path: "Scripts/bash_ssh_conf_CentOS.sh"
+  end
+
+# web-server
+(1..2).each do |i|
+  config.vm.define "web-#{format("%02d", i)}" do |cfg|
+    cfg.vm.box = "centos/7"
+    cfg.vm.provider :virtualbox do |vb|
+      vb.name = "web-#{format("%02d", i)}"
+      vb.customize ["modifyvm", :id, "--cpus", 1]
+      vb.customize ["modifyvm", :id, "--memory", 1024]
+    end
+    cfg.vm.hostname = "web-#{format("%02d", i)}"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "private_network", ip: "192.168.111.11"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19211, auto_correct: false, id: "ssh"
+    cfg.vm.network "private_network", ip: "192.168.111.#{i+10}"
+    cfg.vm.network "forwarded_port", guest: 22, host: 19210 + i, auto_correct: false, id: "ssh"
     cfg.vm.provision "shell", path: "Scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "docker/web/", destination: "~/docker"
   end
+end
 
   # WAS-server
   config.vm.define:"WAS-01" do |cfg|
@@ -77,10 +92,13 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     # web
     cfg.vm.provision "file", source: "ansible/web/install_docker_nginx.yaml", destination: "install_docker_nginx.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker_nginx.yaml", privileged: false
+    cfg.vm.provision "file", source: "ansible/web/templates/haproxy.cfg.j2", destination: "/home/vagrant/templates/haproxy.cfg.j2"
+    cfg.vm.provision "file", source: "ansible/web/install_haproxy.yaml", destination: "install_haproxy.yaml"
+    cfg.vm.provision "shell", inline: "ansible-playbook install_haproxy.yaml", privileged: false
     # WAS
     cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_container.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
-    # DB-server
+    # # DB-server
     cfg.vm.provision "file", source: "ansible/DB/maria_db.yaml", destination: "maria_db.yaml"
     cfg.vm.provision "file", source: "ansible/DB/vars/main.yaml", destination: "main.yaml"
     cfg.vm.provision "file", source: "ansible/DB/tasks/install.yaml", destination: "install.yaml"
