@@ -18,8 +18,8 @@ lc_messages_dir = /usr/share/mysql
 lc_messages     = en_US
 skip-external-locking
 
-bind-address            = {{ mysql.bind_address }}
-max_connections         = {{ mysql.max_connections }}
+bind-address            = 192.168.111.21-30
+max_connections         = 50
 connect_timeout         = 5
 wait_timeout            = 600
 max_allowed_packet      = 16M
