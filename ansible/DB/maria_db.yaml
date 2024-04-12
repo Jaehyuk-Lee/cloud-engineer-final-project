@@ -10,7 +10,6 @@
       args:
         creates: /etc/my.cnf.bak
       failed_when: false
-    - name: Copy my.cnf file
-      copy:
-        src: /home/vagrant/my.cnf
-        dest: /etc/my.cnf
+    - name : mv my.cnf file
+      command: mv /home/vagrant/my.cnf /etc/my.cnf
+
