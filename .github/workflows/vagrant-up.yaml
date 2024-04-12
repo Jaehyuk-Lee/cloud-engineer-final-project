@@ -1,0 +1,41 @@
+name: Run vagrant up
+run-name: ${{ github.actor }} is running vagrant up 🚀
+
+on:
+  pull_request:
+    paths:
+      - ansible/*
+      - docker/*
+      - scripts/*
+      - Vagrantfile
+
+jobs:
+  vagrant-up:
+    runs-on: macos-12
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # 버추얼 박스에서 192.168.111.0/24 대역의 private network를 허용하기 위한 설정
+      - name: add Network /etc/vbox/networks.conf
+        run: |
+          sudo mkdir -p /etc/vbox && \
+          echo '* 192.168.111.0/24' > ~/networks.conf && \
+          sudo mv ~/networks.conf /etc/vbox/networks.conf
+
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d/boxes
+          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+          restore-keys: |
+            ${{ runner.os }}-vagrant-
+
+      - name: Show Vagrant version
+        run: vagrant --version
+
+      - name: Run vagrant up
+        run: vagrant up
+
+      - name: ssh into box after boot
+        run: vagrant ssh ansible-server -c "echo 'hello world! ansible-server'"
