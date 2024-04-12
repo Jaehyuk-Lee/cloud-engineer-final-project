@@ -26,22 +26,6 @@
     - ::1
     - localhost
 
-- name: remove test db
-  mysql_db:
-    login_user: "{{ mysql_user }}"
-    login_password: "{{ mysql_user_password }}"
-    db: test
-    state: absent
-
-- name: create a new db
-  mysql_db:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: "{{ mysql_user_db_name }}"
-    collation: "{{ mysql_collation }}"
-    encoding: "{{ mysql_encoding }}"
-    state: present
-
 - name: delete anonymouse user
   mysql_user:
     login_user: root
@@ -49,6 +33,14 @@
     name: ""
     host_all: yes
     state: absent
+
+- name: Insert data into mytable
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: wbdb
+    state: import
+    target: /home/vagrant/data.sql
 
 - name: create a new user
   mysql_user:
@@ -59,11 +51,3 @@
     priv: "{{ mysql_user_db_name }}.*:ALL,GRANT"
     host: "%"
     state: present
-
-- name: Insert data into mytable
-  mysql_db:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: wbdb
-    state: import
-    target: /home/vagrant/data.sql
