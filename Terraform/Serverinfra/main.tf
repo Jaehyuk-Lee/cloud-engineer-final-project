@@ -45,6 +45,9 @@ module "WEB-EKS" {
   PUB_SUB_2_B_ID       = module.VPC.PUB_SUB_2_B_ID
   PRI_SUB_3_A_ID       = module.VPC.PRI_SUB_3_A_ID
   PRI_SUB_4_B_ID       = module.VPC.PRI_SUB_4_B_ID
+  PRI_SUB_5_A_ID       = module.VPC.PRI_SUB_5_A_ID
+  PRI_SUB_6_B_ID       = module.VPC.PRI_SUB_6_B_ID
+
 }
 
 # module "WAS-EKS" {
@@ -64,10 +67,10 @@ module "Web-node" {
   PRI_SUB_4_B_ID   = module.VPC.PRI_SUB_4_B_ID
 }
 
-# module "Was-node" {
-#   source           = "../modules/was-node"
-#   EKS_CLUSTER_NAME = module.WAS-EKS.EKS_CLUSTER_NAME
-#   NODE_GROUP_ARN   = module.IAM.NODE_GROUP_ROLE_ARN
-#   PRI_SUB_5_A_ID   = module.VPC.PRI_SUB_5_A_ID
-#   PRI_SUB_6_B_ID   = module.VPC.PRI_SUB_6_B_ID
-# }
+module "Was-node" {
+  source           = "../modules/was-node"
+  EKS_CLUSTER_NAME = module.WEB-EKS.EKS_CLUSTER_NAME
+  NODE_GROUP_ARN   = module.IAM.NODE_GROUP_ROLE_ARN
+  PRI_SUB_5_A_ID   = module.VPC.PRI_SUB_5_A_ID
+  PRI_SUB_6_B_ID   = module.VPC.PRI_SUB_6_B_ID
+}
