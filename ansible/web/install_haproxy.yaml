@@ -1,0 +1,28 @@
+- name: Configure HAProxy server
+  hosts: haproxy
+  become: true
+  tasks:
+    - name: Install HAProxy
+      yum:
+        name: haproxy
+        state: present
+
+    - name: Create directory for HAProxy stats socket
+      file:
+        path: /run/haproxy
+        state: directory
+        owner: haproxy
+        group: haproxy
+        mode: '0755'
+
+    - name: Copy HAProxy configuration file
+      template:
+        src: templates/haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+      notify: Restart HAProxy
+
+  handlers:
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted

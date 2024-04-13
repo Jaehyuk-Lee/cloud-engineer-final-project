@@ -18,4 +18,4 @@
         image: my-nginx-image
         state: started
         ports:
-          - "8081:80"
+          - "80:80"

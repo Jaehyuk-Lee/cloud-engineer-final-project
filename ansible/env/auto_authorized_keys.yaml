@@ -3,6 +3,7 @@
     - web
     - WAS
     - DB
+    - haproxy
   gather_facts: no
 
   tasks:
