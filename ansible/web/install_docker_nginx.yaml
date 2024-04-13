@@ -2,20 +2,22 @@
 - name: Install Nginx in Docker container
   hosts: web
   become: yes
+  vars_files:
+    - vars/variables.yaml
   tasks:
     - name: Build Nginx Docker image
       docker_image:
         build:
-          path: /home/vagrant/docker
+          path: "{{ docker_build_path }}"
           pull: no
         push: no
-        name: my-nginx-image
+        name: "{{ nginx_image_name }}"
         source: build
 
     - name: Run Nginx Docker container
       docker_container:
-        name: my-nginx-container
-        image: my-nginx-image
+        name: "{{ nginx_container_name }}"
+        image: "{{ nginx_image_name }}"
         state: started
         ports:
-          - "80:80"
+          - "{{ host_port }}:{{ container_port }}"

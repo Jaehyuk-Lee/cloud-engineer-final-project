@@ -1,0 +1,6 @@
+# Install Nginx in Docker container
+nginx_image_name: my-nginx-image
+docker_build_path: /home/vagrant/docker
+nginx_container_name: my-nginx-container1
+host_port: 8082
+container_port: 80

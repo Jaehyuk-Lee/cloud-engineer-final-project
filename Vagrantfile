@@ -86,6 +86,8 @@ end
     cfg.vm.provision "shell", inline: "ansible-playbook auto_known_host.yaml", privileged: false
     cfg.vm.provision "file", source: "ansible/env/auto_authorized_keys.yaml", destination: "auto_authorized_keys.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook auto_authorized_keys.yaml --extra-vars 'ansible_ssh_pass=vagrant'", privileged: false
+    # vars
+    cfg.vm.provision "file", source: "ansible/vars/variables.yaml", destination: "vars/variables.yaml"
     # common
     cfg.vm.provision "file", source: "ansible/common/install_docker.yaml", destination: "install_docker.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook install_docker.yaml", privileged: false
