@@ -2,7 +2,7 @@
 - hosts: DB
   become: yes
   vars_files:
-    - ansible/DB/vars/main.yaml
+    - /home/vagrant/ansible/DB/vars/main.yaml
   tasks:
     - include: ansible/DB/tasks/install.yaml
     - name: Backup existing my.cnf file
