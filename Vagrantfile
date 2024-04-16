@@ -17,23 +17,23 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
   end
 
-# web-server
-(1..2).each do |i|
-  config.vm.define "web-#{format("%02d", i)}" do |cfg|
-    cfg.vm.box = "centos/7"
-    cfg.vm.provider :virtualbox do |vb|
-      vb.name = "web-#{format("%02d", i)}"
-      vb.customize ["modifyvm", :id, "--cpus", 1]
-      vb.customize ["modifyvm", :id, "--memory", 1024]
+  # web-server
+  (1..2).each do |i|
+    config.vm.define "web-#{format("%02d", i)}" do |cfg|
+      cfg.vm.box = "centos/7"
+      cfg.vm.provider :virtualbox do |vb|
+        vb.name = "web-#{format("%02d", i)}"
+        vb.customize ["modifyvm", :id, "--cpus", 1]
+        vb.customize ["modifyvm", :id, "--memory", 1024]
+      end
+      cfg.vm.hostname = "web-#{format("%02d", i)}"
+      cfg.vm.synced_folder ".", "/vagrant", disabled: true
+      cfg.vm.network "private_network", ip: "192.168.111.#{i+10}"
+      cfg.vm.network "forwarded_port", guest: 22, host: 19210 + i, auto_correct: false, id: "ssh"
+      cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
+      cfg.vm.provision "file", source: "docker/web/", destination: "~/docker"
     end
-    cfg.vm.hostname = "web-#{format("%02d", i)}"
-    cfg.vm.synced_folder ".", "/vagrant", disabled: true
-    cfg.vm.network "private_network", ip: "192.168.111.#{i+10}"
-    cfg.vm.network "forwarded_port", guest: 22, host: 19210 + i, auto_correct: false, id: "ssh"
-    cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-    cfg.vm.provision "file", source: "docker/web/", destination: "~/docker"
   end
-end
 
   # WAS-server
   config.vm.define:"WAS-01" do |cfg|
