@@ -21,3 +21,16 @@
         state: started
         ports:
           - "{{ host_port }}:{{ container_port }}"
+
+    - name: Start firewall daemon
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Open port 80
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
