@@ -49,5 +49,5 @@
     name: "{{ mysql_user }}"
     password: "{{ mysql_user_password }}"
     priv: "{{ mysql_user_db_name }}.*:ALL,GRANT"
-    host: "%"
+    host: "192.168.111.0/24"
     state: present
