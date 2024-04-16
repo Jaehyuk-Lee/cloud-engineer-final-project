@@ -1,6 +1,9 @@
-FROM tomcat:9.0.87-jdk11-corretto
+FROM node:20-alpine3.18
 
-# docker/WAS 디렉토리 안에 있는 소스코드를 Tomcat ROOT 디렉토리로 복사
-ADD ./webapp /usr/local/tomcat/webapps/ROOT
+WORKDIR /app
 
-CMD ["catalina.sh", "run"]
+COPY ./app /app
+
+EXPOSE 3000
+
+CMD ["node", "app.js"]
