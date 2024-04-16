@@ -14,7 +14,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.hostname = "haproxy-server"
     cfg.vm.network "private_network", ip: "192.168.111.100"
     cfg.vm.network "forwarded_port", guest: 22, host: 19300, auto_correct: false, id: "ssh"
-    cfg.vm.provision "shell", path: "Scripts/bash_ssh_conf_CentOS.sh"
+    cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
   end
 
 # web-server
@@ -30,7 +30,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "private_network", ip: "192.168.111.#{i+10}"
     cfg.vm.network "forwarded_port", guest: 22, host: 19210 + i, auto_correct: false, id: "ssh"
-    cfg.vm.provision "shell", path: "Scripts/bash_ssh_conf_CentOS.sh"
+    cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "docker/web/", destination: "~/docker"
   end
 end
@@ -82,30 +82,20 @@ end
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "private_network", ip: "192.168.111.2"
     cfg.vm.network "forwarded_port", guest: 22, host: 19202, auto_correct: false, id: "ssh"
+    cfg.vm.provision "file", source: "ansible/", destination: "~/ansible"
     # env
     cfg.vm.provision "shell", path: "scripts/bootstrap.sh"
-    cfg.vm.provision "file", source: "ansible/env/ready_ansible_env.yaml", destination: "ready_ansible_env.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook ready_ansible_env.yaml"
-    cfg.vm.provision "file", source: "ansible/env/auto_known_host.yaml", destination: "auto_known_host.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook auto_known_host.yaml", privileged: false
-    cfg.vm.provision "file", source: "ansible/env/auto_authorized_keys.yaml", destination: "auto_authorized_keys.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook auto_authorized_keys.yaml --extra-vars 'ansible_ssh_pass=vagrant'", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/ready_ansible_env.yaml"
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/auto_known_host.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/auto_authorized_keys.yaml --extra-vars 'ansible_ssh_pass=vagrant'", privileged: false
     # common
-    cfg.vm.provision "file", source: "ansible/common/install_docker.yaml", destination: "install_docker.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook install_docker.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/common/install_docker.yaml", privileged: false
     # web
-    cfg.vm.provision "file", source: "ansible/web/install_docker_nginx.yaml", destination: "install_docker_nginx.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook install_docker_nginx.yaml", privileged: false
-    cfg.vm.provision "file", source: "ansible/web/templates/haproxy.cfg.j2", destination: "/home/vagrant/templates/haproxy.cfg.j2"
-    cfg.vm.provision "file", source: "ansible/web/install_haproxy.yaml", destination: "install_haproxy.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook install_haproxy.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/install_docker_nginx.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/install_haproxy.yaml", privileged: false
     # WAS
-    cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_container.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
-    # # DB-server
-    cfg.vm.provision "file", source: "ansible/DB/maria_db.yaml", destination: "maria_db.yaml"
-    cfg.vm.provision "file", source: "ansible/DB/vars/main.yaml", destination: "main.yaml"
-    cfg.vm.provision "file", source: "ansible/DB/tasks/install.yaml", destination: "install.yaml"
-    cfg.vm.provision "shell", inline: "ansible-playbook maria_db.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/WAS/run_tomcat_container.yaml", privileged: false
+    # DB-server
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/DB/maria_db.yaml", privileged: false
   end
 end
