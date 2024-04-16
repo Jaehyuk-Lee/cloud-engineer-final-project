@@ -1,17 +1,17 @@
 ---
-- name: Run Tomcat Docker container
+- name: Run Nodejs Docker container
   hosts: WAS
   become: true
 
   tasks:
-    # - name: Stop Tomcat Docker container
+    # - name: Stop Nodejs Docker container
     #   docker_container:
-    #     name: my-tomcat-container
+    #     name: my-node-container
     #     state: stopped
 
-    # - name: Remove Tomcat Docker container
+    # - name: Remove Nodejs Docker container
     #   docker_container:
-    #     name: my-tomcat-container
+    #     name: my-node-container
     #     state: absent
 
     # # Docker network 파일 삭제 후 Docker 서비스 재시작 (포트 정보 캐싱 초기화)
@@ -30,21 +30,21 @@
     #     name: docker
     #     state: started
 
-    # - name: Build Docker image
-    #   docker_image:
-    #     build:
-    #       path: /home/vagrant/docker
-    #       pull: no
-    #     name: my-tomcat-image
-    #     source: build
+    - name: Build Docker image
+      docker_image:
+        build:
+          path: /home/vagrant/docker
+          pull: no
+        name: my-node-image
+        source: build
 
-    # - name: Run Tomcat Docker container
-    #   docker_container:
-    #     name: my-tomcat-container
-    #     image: my-tomcat-image
-    #     state: started
-    #     ports:
-    #       - "8080:8080"
+    - name: Run Nodejs Docker container
+      docker_container:
+        name: my-node-container
+        image: my-node-image
+        state: started
+        ports:
+          - "3000:3000"
 
     # Shell command로 Tomcat Docker 실행하기
 
@@ -66,9 +66,9 @@
         state: started
         enabled: yes
 
-    - name: Open port 8080
+    - name: Open port 3000
       firewalld:
-        port: 8080/tcp
+        port: 3000/tcp
         permanent: yes
         state: enabled
         immediate: yes

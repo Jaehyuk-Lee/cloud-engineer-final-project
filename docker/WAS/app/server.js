@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   // create the connection to database
   const connection = mysql.createConnection({
-    host: 'localhost',
+    host: '192.168.111.31',
     user: 'root',
     password: 'root',
     database: 'wbdb'
@@ -33,5 +33,5 @@ app.get('/', (req, res) => {
   connection.end();
 });
 
-app.listen(8000);
-console.log("Listening to port 8000");
+app.listen(3000);
+console.log("Listening to port 3000");
