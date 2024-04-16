@@ -14,8 +14,8 @@ app.get('/', (req, res) => {
   // create the connection to database
   const connection = mysql.createConnection({
     host: '192.168.111.31',
-    user: 'root',
-    password: 'root',
+    user: 'myuser',
+    password: 'mypassword!',
     database: 'wbdb'
   });
 
