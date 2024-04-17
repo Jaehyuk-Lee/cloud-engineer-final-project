@@ -1,17 +1,17 @@
 ---
-- hosts: DB-01
+- hosts: DB
   become: yes
   vars_files:
-    - /home/vagrant/main.yaml
+    - vars/main.yaml
   tasks:
-    - include: /home/vagrant/install.yaml
-    - name: Backup existing client.cnf file
-      command: mv /etc/my.cnf.d/client.cnf /etc/my.cnf.d/client.bak
+    - include: tasks/install.yaml
+    - name: Backup existing my.cnf file
+      command: mv /etc/my.cnf /etc/my.cnf.bak
       args:
         creates: /etc/my.cnf.d/client.cnf.bak
       failed_when: false
 
-    - name : mv my.cnf file
+    - name: mv my.cnf file
       command: mv /home/vagrant/client.cnf /etc/my.cnf.d/client.cnf
 
     - name: Backup existing mysql-clients.cnf file
@@ -19,7 +19,7 @@
       args:
         creates: /etc/my.cnf.d/mysql-clients.cnf.bak
       failed_when: false
-    - name : mv my.cnf file
+    - name: mv my.cnf file
       command: mv /home/vagrant/mysql-clients.cnf /etc/my.cnf.d/mysql-clients.cnf
 
     - name: Backup existing server.cnf file
@@ -27,7 +27,5 @@
       args:
         creates: /etc/my.cnf.d/server.cnf.bak
       failed_when: false
-    - name : mv my.cnf file
+    - name: mv my.cnf file
       command: mv /home/vagrant/server.cnf /etc/my.cnf.d/server.cnf
-
-
