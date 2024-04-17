@@ -11,6 +11,8 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+  console.log("name: " + req.query.name);
+
   // create the connection to database
   const connection = mysql.createConnection({
     host: '192.168.111.31',
@@ -19,12 +21,11 @@ app.get('/', (req, res) => {
     database: 'wbdb'
   });
 
-  // simple query
   connection.query(
-    'SELECT * FROM mydb1',
+    `SELECT * FROM mydb1 WHERE 지역 = '${req.query.name}'`,
     function(err, results, fields) {
-      console.log(results); // results contains rows returned by server
-      console.log(fields); // fields contains extra meta data about results, if available
+      console.log(results);
+      console.log(fields);
 
       res.send(results);
       res.status(200).end();
