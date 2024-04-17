@@ -4,44 +4,16 @@
   become: true
 
   tasks:
-    # - name: Stop Nodejs Docker container
-    #   docker_container:
-    #     name: my-node-container
-    #     state: stopped
-
-    # - name: Remove Nodejs Docker container
-    #   docker_container:
-    #     name: my-node-container
-    #     state: absent
-
-    # # Docker network 파일 삭제 후 Docker 서비스 재시작 (포트 정보 캐싱 초기화)
-    # - name: Stop Docker service
-    #   service:
-    #     name: docker
-    #     state: stopped
-
-    # - name: Remove Docker network file
-    #   file:
-    #     path: /var/lib/docker/network/files/local-kv.db
-    #     state: absent
-
-    # - name: Start Docker service
-    #   service:
-    #     name: docker
-    #     state: started
-
-    - name: Build Docker image
+    - name: Pull Node.js image
       docker_image:
-        build:
-          path: /home/vagrant/docker
-          pull: no
-        name: my-node-image
-        source: build
+        name: ghcr.io/jaehyuk-lee/nodejs-container-registry
+        tag: release
+        source: pull
 
-    - name: Run Nodejs Docker container
+    - name: Run Node.js container
       docker_container:
         name: my-node-container
-        image: my-node-image
+        image: ghcr.io/jaehyuk-lee/nodejs-container-registry:release
         state: started
         ports:
           - "3000:3000"

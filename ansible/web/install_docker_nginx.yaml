@@ -3,19 +3,16 @@
   hosts: web
   become: yes
   tasks:
-    - name: Build Nginx Docker image
+    - name: Pull Nginx image
       docker_image:
-        build:
-          path: /home/vagrant/docker
-          pull: no
-        push: no
-        name: my-nginx-image
-        source: build
+        name: ghcr.io/jaehyuk-lee/nginx-container-registry
+        tag: release
+        source: pull
 
-    - name: Run Nginx Docker container
+    - name: Run Nginx container
       docker_container:
         name: my-nginx-container
-        image: my-nginx-image
+        image: ghcr.io/jaehyuk-lee/nginx-container-registry:release
         state: started
         ports:
           - "80:80"

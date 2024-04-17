@@ -31,7 +31,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       cfg.vm.network "private_network", ip: "192.168.111.#{i+10}"
       cfg.vm.network "forwarded_port", guest: 22, host: 19210 + i, auto_correct: false, id: "ssh"
       cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-      cfg.vm.provision "file", source: "docker/web/", destination: "~/docker"
     end
   end
 
@@ -48,7 +47,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.network "private_network", ip: "192.168.111.21"
     cfg.vm.network "forwarded_port", guest: 22, host: 19221, auto_correct: false, id: "ssh"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-    cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
   end
 
   # DB-server
