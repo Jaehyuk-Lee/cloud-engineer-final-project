@@ -11,6 +11,7 @@ on:
 
 jobs:
   vagrant-up:
+    if: github.actor != 'restyled-io[bot]'
     runs-on: macos-12
 
     steps:
