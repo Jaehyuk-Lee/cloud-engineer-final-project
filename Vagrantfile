@@ -18,7 +18,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
   end
 
 # web-server
-(1..2).each do |i|
+(1..3).each do |i|
   config.vm.define "web-#{format("%02d", i)}" do |cfg|
     cfg.vm.box = "centos/7"
     cfg.vm.provider :virtualbox do |vb|
@@ -36,7 +36,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
 end
 
   # WAS-server
-(1..2).each do |i|
+(1..3).each do |i|
   config.vm.define:"WAS-#{format("%02d", i)}" do |cfg|
     cfg.vm.box = "centos/7"
 	  cfg.vm.provider:virtualbox do |vb|
@@ -50,7 +50,7 @@ end
     cfg.vm.network "forwarded_port", guest: 22, host: 19221 + i, auto_correct: false, id: "ssh"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
-    cfg.vm.provision "shell", path: "scripts/change_web_WAS.sh #{i}"
+    # cfg.vm.provision "shell", path: "scripts/change_web_WAS.sh #{i}"
   end
 end
 
@@ -90,7 +90,6 @@ end
     cfg.vm.provision "file", source: "ansible/env/templates/inventory_template.j2", destination: "/home/vagrant/templates/inventory_template.j2"
     cfg.vm.provision "file", source: "ansible/env/update_inventory_hosts.yaml", destination: "update_inventory_hosts.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook update_inventory_hosts.yaml", privileged: false
-    cfg.vm.provision "shell", inline: "ansible-playbook -e 'web_start_number=1' -e 'web_end_number=7' update_inventory_hosts.yaml"
     # cfg.vm.provision "file", source: "ansible/env/ready_ansible_env.yaml", destination: "ready_ansible_env.yaml"
     # cfg.vm.provision "shell", inline: "ansible-playbook ready_ansible_env.yaml"
     cfg.vm.provision "file", source: "ansible/env/auto_known_host.yaml", destination: "auto_known_host.yaml"

@@ -24,5 +24,6 @@ frontend http_front
 
 backend http_back
     balance roundrobin
-    server web-01 192.168.111.11:80 check
-    server web-02 192.168.111.12:80 check
+{% for i in range(1, 4) %}
+    server web-{{ "%02d"|format(i) }} 192.168.111.{{ 10 + i }}:80 check
+{% endfor %}
