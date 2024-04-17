@@ -1,0 +1,43 @@
+# update_hosts.yaml
+- name: Update /etc/hosts file
+  hosts: localhost
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Add web servers to /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ host_ip }} web-{{ host_number }}"
+      with_sequence: start=1 end=2
+      vars:
+        host_ip: "192.168.111.{{ 10 + item|int }}"
+        host_number: "{{ \"%02d\"|format(item|int) }}"
+
+    - name: Add WAS servers to /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ host_ip }} WAS-{{ host_number }}"
+      with_sequence: start=1 end=2
+      vars:
+        host_ip: "192.168.111.{{ 20 + item|int }}"
+        host_number: "{{ \"%02d\"|format(item|int) }}"
+
+    - name: Add static hosts to /etc/hosts
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          192.168.111.2 ansible-server
+          192.168.111.31 DB-01
+          192.168.111.100 haproxy-server
+
+# update_inventory.yaml
+- name: Update Ansible inventory
+  hosts: localhost
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Generate Ansible inventory
+      template:
+        src: inventory_template.j2
+        dest: /etc/ansible/hosts
+      delegate_to: localhost
