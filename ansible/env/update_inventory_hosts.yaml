@@ -11,7 +11,7 @@
       with_sequence: start=1 end=2
       vars:
         host_ip: "192.168.111.{{ 10 + item|int }}"
-        host_number: "{{ \"%02d\"|format(item|int) }}"
+        host_number: '{{ "%02d"|format(item|int) }}'
 
     - name: Add WAS servers to /etc/hosts
       lineinfile:
@@ -20,7 +20,7 @@
       with_sequence: start=1 end=2
       vars:
         host_ip: "192.168.111.{{ 20 + item|int }}"
-        host_number: "{{ \"%02d\"|format(item|int) }}"
+        host_number: '{{ "%02d"|format(item|int) }}'
 
     - name: Add static hosts to /etc/hosts
       blockinfile:
