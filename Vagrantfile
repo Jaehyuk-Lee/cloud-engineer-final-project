@@ -66,9 +66,11 @@ end
     cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: false, id: "mysql"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
-    cfg.vm.provision "file", source: "ansible/DB/DB_data/client.cnf", destination: "client.cnf"
-    cfg.vm.provision "file", source: "ansible/DB/DB_data/mysql-clients.cnf", destination: "mysql-clients.cnf"
-    cfg.vm.provision "file", source: "ansible/DB/DB_data/server.cnf", destination: "server.cnf"
+    cfg.vm.provision "file", source: "ansible/DB/DB_data/MariaDB.repo", destination: "MariaDB.repo"
+    # cfg.vm.provision "file", source: "ansible/DB/DB_data/mysql-clients.cnf", destination: "mysql-clients.cnf"
+    # cfg.vm.provision "file", source: "ansible/DB/DB_data/server.cnf", destination: "server.cnf"
+    cfg.vm.provision "file", source: "ansible/DB/DB_data/my.cnf", destination: "my.cnf"
+
     cfg.vm.provision "shell", inline: <<-SHELL
       sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
     SHELL
@@ -105,6 +107,7 @@ end
     cfg.vm.provision "file", source: "ansible/WAS/run_tomcat_container.yaml", destination: "run_tomcat_container.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook run_tomcat_container.yaml", privileged: false
     # # DB-server
+    # cfg.vm.provision "shell", inline: "sudo yum install MariaDB-server MariaDB-client", privileged: false
     cfg.vm.provision "file", source: "ansible/DB/maria_db.yaml", destination: "maria_db.yaml"
     cfg.vm.provision "file", source: "ansible/DB/vars/main.yaml", destination: "main.yaml"
     cfg.vm.provision "file", source: "ansible/DB/tasks/install.yaml", destination: "install.yaml"
