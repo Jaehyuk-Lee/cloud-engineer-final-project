@@ -4,7 +4,7 @@
   vars_files:
     - vars/main.yaml
   tasks:
-    - name : mv MaiaDB.repo file
+    - name: mv MaiaDB.repo file
       command: mv /home/vagrant/MariaDB.repo /etc/yum.repos.d/MariaDB.repo
 
     - include: tasks/install.yaml
