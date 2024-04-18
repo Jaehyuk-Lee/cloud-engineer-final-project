@@ -1,24 +1,22 @@
 ---
-- name: Run Tomcat Docker container
+- name: Run Nodejs Docker container
   hosts: WAS
   become: true
 
   tasks:
-    - name: Build Docker image
+    - name: Pull Node.js image
       docker_image:
-        build:
-          path: /home/vagrant/docker
-          pull: no
-        name: my-tomcat-image
-        source: build
+        name: ghcr.io/jaehyuk-lee/nodejs-container-registry
+        tag: release
+        source: pull
 
-    - name: Run Tomcat Docker container
+    - name: Run Node.js container
       docker_container:
-        name: my-tomcat-container
-        image: my-tomcat-image
+        name: my-node-container
+        image: ghcr.io/jaehyuk-lee/nodejs-container-registry:release
         state: started
         ports:
-          - "8080:8080"
+          - "3000:3000"
 
     # Shell command로 Tomcat Docker 실행하기
 
@@ -40,9 +38,9 @@
         state: started
         enabled: yes
 
-    - name: Open port 8080
+    - name: Open port 3000
       firewalld:
-        port: 8080/tcp
+        port: 3000/tcp
         permanent: yes
         state: enabled
         immediate: yes

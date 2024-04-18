@@ -31,7 +31,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       cfg.vm.network "private_network", ip: "192.168.111.#{i+10}"
       cfg.vm.network "forwarded_port", guest: 22, host: 19210 + i, auto_correct: false, id: "ssh"
       cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-      cfg.vm.provision "file", source: "docker/web/", destination: "~/docker"
     end
   end
 
@@ -69,7 +68,9 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: false, id: "mysql"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
-    cfg.vm.provision "file", source: "ansible/DB/templates/my.cnf.j2", destination: "my.cnf"
+    cfg.vm.provision "file", source: "ansible/DB/DB_data/client.cnf", destination: "client.cnf"
+    cfg.vm.provision "file", source: "ansible/DB/DB_data/mysql-clients.cnf", destination: "mysql-clients.cnf"
+    cfg.vm.provision "file", source: "ansible/DB/DB_data/server.cnf", destination: "server.cnf"
     cfg.vm.provision "shell", inline: <<-SHELL
       sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
     SHELL
@@ -97,7 +98,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/install_docker_nginx.yaml", privileged: false
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/install_haproxy.yaml", privileged: false
     # WAS
-    cfg.vm.provision "shell", inline: "ansible-playbook ansible/WAS/run_tomcat_container.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/WAS/run_nodejs_container.yaml", privileged: false
     # DB-server
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/DB/maria_db.yaml", privileged: false
   end

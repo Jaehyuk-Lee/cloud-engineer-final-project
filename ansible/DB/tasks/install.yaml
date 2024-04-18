@@ -34,14 +34,6 @@
     host_all: yes
     state: absent
 
-- name: Insert data into mytable
-  mysql_db:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: wbdb
-    state: import
-    target: /home/vagrant/data.sql
-
 - name: create a new user
   mysql_user:
     login_user: root
@@ -49,5 +41,33 @@
     name: "{{ mysql_user }}"
     password: "{{ mysql_user_password }}"
     priv: "{{ mysql_user_db_name }}.*:ALL,GRANT"
-    host: "%"
+    host: "192.168.111.0/24"
     state: present
+
+- name: Grant privileges to the user for database creation
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: myuser
+    password: "{{ mysql_user_password }}"
+    priv: "wbdb.*:ALL"
+    host: "{{ item }}"
+    state: present
+  with_items:
+    - "192.168.111.0/24"
+    - "%"
+
+- name: Create a new database
+  mysql_db:
+    login_user: myuser
+    login_password: "{{ mysql_user_password }}"
+    name: wbdb
+    state: present
+
+- name: Insert data into mytable
+  mysql_db:
+    login_user: myuser
+    login_password: "{{ mysql_user_password }}"
+    name: wbdb
+    state: import
+    target: /home/vagrant/data.sql
