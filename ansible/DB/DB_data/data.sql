@@ -1,15 +1,14 @@
 USE wbdb;
 
 -- 사용자(User) 테이블 생성
-CREATE TABLE
-    IF NOT EXISTS User (
-        UserID INT PRIMARY KEY,
-        Name VARCHAR(50),
-        ResidentRegistrationNumber VARCHAR(13),
-        ContactNumber VARCHAR(14),
-        Address VARCHAR(100),
-        Email VARCHAR(50)
-    );
+CREATE TABLE IF NOT EXISTS USER (
+    UserID int PRIMARY KEY,
+    Name varchar(50),
+    ResidentRegistrationNumber varchar(13),
+    ContactNumber varchar(14),
+    Address varchar(100),
+    Email varchar(50)
+);
 
 -- -- 복무 현황(ServiceStatus) 테이블 생성
 -- CREATE TABLE ServiceStatus (
@@ -20,10 +19,8 @@ CREATE TABLE
 --     ReportID INT PRIMARY KEY, UserID INT, ReportDate DATE, ReportType VARCHAR(50), ReportContent VARCHAR(200), AdditionalReportInformation VARCHAR(200), FOREIGN KEY (UserID) REFERENCES User (UserID)
 -- );
 -- 사용자(User) 테이블에 데이터 삽입
-INSERT INTO
-    User (UserID, Name, ResidentRegistrationNumber, ContactNumber, Address, Email)
-VALUES
-    (3, '장발장', '123456-1234567', '01012345678', '서울시 강남구', 'bal@gmail.com'),
+INSERT INTO USER (UserID, Name, ResidentRegistrationNumber, ContactNumber, Address, Email)
+    VALUES (3, '장발장', '123456-1234567', '01012345678', '서울시 강남구', 'bal@gmail.com'),
     (5, '장손장', '101010-2222222', '01022223333', '경기도 남양주시', 'son@gmail.com'),
     (6, '장눈장', '123456-5656565', '01099991111', '대전시 유성구', 'noon@naver.com');
 
