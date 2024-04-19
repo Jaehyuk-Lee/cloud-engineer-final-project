@@ -4,18 +4,18 @@
   vars_files:
     - vars/main.yaml
   tasks:
-    - name: mv MaiaDB.repo file
-      command: mv /home/vagrant/MariaDB.repo /etc/yum.repos.d/MariaDB.repo
+    - name: cp MaiaDB.repo file
+      command: cp /home/vagrant/MariaDB.repo /etc/yum.repos.d/MariaDB.repo
 
     - include: tasks/install.yaml
 
     - name: Backup existing my.cnf file
-      command: mv /etc/my.cnf /etc/my.bak
+      command: cp /etc/my.cnf /etc/my.bak
       args:
         creates: /etc/server.cnf.bak
       failed_when: false
-    - name: mv my.cnf file
-      command: mv /home/vagrant/my.cnf /etc/my.cnf
+    - name: cp my.cnf file
+      command: cp /home/vagrant/my.cnf /etc/my.cnf
 
     - name: Restart MySQL service
       service:
