@@ -30,11 +30,15 @@
         name: docker-ce
         state: present
 
-    - name: Enable and start Docker service
+    # Firewall daemon이 Docker service보다 먼저 실행돼야 함
+    - name: Start firewall daemon and Docker service
       service:
-        name: docker
+        name: "{{ item }}"
         state: started
         enabled: yes
+      loop:
+        - firewalld
+        - docker
 
     # Requirements to use Docker with Ansible
     - name: Install EPEL repository, pip package

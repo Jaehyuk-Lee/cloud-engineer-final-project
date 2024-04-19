@@ -5,25 +5,6 @@
   gather_facts: no
 
   tasks:
-    # Start firewall daemon
-    - name: Start firewall daemon
-      service:
-        name: firewalld
-        state: started
-        enabled: yes
-
-    - name: Open port 3000
-      firewalld:
-        port: 3000/tcp
-        permanent: yes
-        state: enabled
-        immediate: yes
-
-    - name: Restart Docker service
-      service:
-        name: docker
-        state: restarted
-
     - name: Pull Node.js image
       docker_image:
         name: ghcr.io/jaehyuk-lee/nodejs-container-registry
@@ -50,3 +31,10 @@
     #   shell:
     #     cmd: docker run -d -p 3000:3000 --name=my-node-container ghcr.io/jaehyuk-lee/nodejs-container-registry:release
     #   when: nodejs_container_status.rc != 0
+
+    - name: Open port 3000
+      firewalld:
+        port: 3000/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
