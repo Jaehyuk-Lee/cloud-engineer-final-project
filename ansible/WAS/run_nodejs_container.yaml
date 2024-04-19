@@ -1,0 +1,40 @@
+---
+- name: Run Nodejs Docker container
+  hosts: WAS
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: Pull Node.js image
+      docker_image:
+        name: ghcr.io/jaehyuk-lee/nodejs-container-registry
+        tag: release
+        source: pull
+
+    - name: Run Node.js container
+      docker_container:
+        name: my-node-container
+        image: ghcr.io/jaehyuk-lee/nodejs-container-registry:release
+        state: started
+        ports:
+          - "3000:3000"
+
+    # Shell command로 Node.js 실행하기
+
+    # - name: Check Node.js container (shell command)
+    #   shell:
+    #     cmd: docker container ps | grep ghcr.io/jaehyuk-lee/nodejs-container-registry:release
+    #   register: nodejs_container_status
+    #   failed_when: nodejs_container_status.rc != 1 and nodejs_container_status.rc != 0
+
+    # - name: Run Node.js container (shell command)
+    #   shell:
+    #     cmd: docker run -d -p 3000:3000 --name=my-node-container ghcr.io/jaehyuk-lee/nodejs-container-registry:release
+    #   when: nodejs_container_status.rc != 0
+
+    - name: Open port 3000
+      firewalld:
+        port: 3000/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
