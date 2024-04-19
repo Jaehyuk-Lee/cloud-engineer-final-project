@@ -4,6 +4,7 @@
     - web
     - WAS
   become: true
+  gather_facts: no
 
   tasks:
     - name: Install yum-utils, device-mapper-persistent-data, lvm2 package
