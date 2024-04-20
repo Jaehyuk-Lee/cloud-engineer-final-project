@@ -18,7 +18,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
   end
 
   # web-server
-  (1..3).each do |i|
+  (1..2).each do |i|
     config.vm.define "web-#{format("%02d", i)}" do |cfg|
       cfg.vm.box = "centos/7"
       cfg.vm.provider :virtualbox do |vb|
@@ -35,7 +35,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
   end
 
   # WAS-server
-  (1..3).each do |i|
+  (1..2).each do |i|
     config.vm.define:"WAS-#{format("%02d", i)}" do |cfg|
       cfg.vm.box = "centos/7"
       cfg.vm.provider:virtualbox do |vb|
@@ -48,8 +48,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       cfg.vm.network "private_network", ip: "192.168.111.#{i+20}"
       cfg.vm.network "forwarded_port", guest: 22, host: 19221 + i, auto_correct: false, id: "ssh"
       cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-      cfg.vm.provision "file", source: "docker/WAS/", destination: "~/docker"
-      # cfg.vm.provision "shell", path: "scripts/change_web_WAS.sh #{i}"
+      cfg.vm.provision "shell", path: "scripts/change_web_WAS.sh"
     end
   end
 
