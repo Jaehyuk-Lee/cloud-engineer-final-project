@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # /etc/hosts 수정
-end_number=$1
+end_number=${1:-1} # 인수가 없을 경우 기본값은 1
 j2_end_number=$((end_number + 1))
 
 sed -i 's/with_sequence: start=1 end=[0-9]\{1,2\}/with_sequence: start=1 end='"$end_number"'/g' ansible/env/update_inventory_hosts.yaml
@@ -16,4 +16,4 @@ sed -i 's/{% for i in range(1, [0-9]\{1,2\}) %}/{% for i in range(1, '"$j2_end_n
 sed -i 's/(1..[0-9]\{1,2\}).each do |i|/(1..'"$end_number"').each do |i|/g' Vagrantfile
 
 vagrant up
-vagrant provision
+# vagrant provision
