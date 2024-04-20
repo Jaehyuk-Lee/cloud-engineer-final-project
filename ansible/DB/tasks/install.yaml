@@ -1,15 +1,39 @@
 ---
 - name: install epel-release
-  action: "{{ ansible_pkg_mgr }} name=epel-release state=latest"
+  yum:
+    name: epel-release
+    state: latest
 
-- name: install mysql server
-  action: "{{ ansible_pkg_mgr }} name=mariadb-server state=present"
+# - name: install mysql server
+#   action: "{{ ansible_pkg_mgr }} name=mariadb-server state=present"
+
+- name: Update system packages
+  yum:
+    name: "*"
+    state: latest
 
 - name: install python mysql support library
   action: "{{ ansible_pkg_mgr }} name=MySQL-python state=latest"
 
+- name: Install MariaDB server and client
+  package:
+    name:
+      - MariaDB-server
+      - MariaDB-client
+    state: present
+
+# - name: Run sudo yum install python3-pip
+#   expect:
+#     command: sudo yum install python3-pip
+
 - name: start mysql server
   action: service name=mariadb state=started enabled=true
+
+# - name: Run mysql_secure_installation
+#   expect:
+#     command: sudo mysql_secure_installation
+#     responses:
+#       ".*": 'yes\n'
 
 - name: update mysql root password
   mysql_user:
@@ -34,14 +58,6 @@
     host_all: yes
     state: absent
 
-- name: Insert data into mytable
-  mysql_db:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: wbdb
-    state: import
-    target: /home/vagrant/data.sql
-
 - name: create a new user
   mysql_user:
     login_user: root
@@ -49,5 +65,18 @@
     name: "{{ mysql_user }}"
     password: "{{ mysql_user_password }}"
     priv: "{{ mysql_user_db_name }}.*:ALL,GRANT"
-    host: "%"
+    host: "192.168.111.0/24"
     state: present
+
+- name: Grant privileges to the user for database creation
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: myuser
+    password: "{{ mysql_user_password }}"
+    priv: "wbdb.*:ALL"
+    host: "{{ item }}"
+    state: present
+  with_items:
+    - "192.168.111.0/24"
+    - "%"
