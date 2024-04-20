@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-12
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # 버추얼 박스에서 192.168.111.0/24 대역의 private network를 허용하기 위한 설정
       - name: add Network /etc/vbox/networks.conf
