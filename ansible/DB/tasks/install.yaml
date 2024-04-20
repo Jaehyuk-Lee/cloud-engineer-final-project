@@ -7,10 +7,10 @@
 # - name: install mysql server
 #   action: "{{ ansible_pkg_mgr }} name=mariadb-server state=present"
 
-- name: Update system packages
-  yum:
-    name: "*"
-    state: latest
+# - name: Update system packages
+#   yum:
+#     name: "*"
+#     state: latest
 
 - name: install python mysql support library
   action: "{{ ansible_pkg_mgr }} name=MySQL-python state=latest"

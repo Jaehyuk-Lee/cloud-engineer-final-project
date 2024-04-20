@@ -4,7 +4,7 @@ USE wbdb;
 CREATE TABLE IF NOT EXISTS USER (
     UserID int PRIMARY KEY,
     Name varchar(50),
-    ResidentRegistrationNumber varchar(13),
+    ResidentRegistrationNumber varchar(30),
     ContactNumber varchar(14),
     Address varchar(100),
     Email varchar(50)
