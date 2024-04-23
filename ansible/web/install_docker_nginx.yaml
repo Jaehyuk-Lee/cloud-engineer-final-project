@@ -35,7 +35,7 @@
   hosts: web
   become: yes
   vars:
-    starting_ip: 21  # 첫 번째 웹 서버의 IP 주소 마지막 숫자
+    starting_ip: 21 # 첫 번째 웹 서버의 IP 주소 마지막 숫자
   tasks:
     - name: Pull Nginx image
       docker_image:
@@ -56,7 +56,7 @@
           - "80:80"
         env:
           WAS_IP: "{{ was_ip }}"
-          
+
     - name: Open port 80
       firewalld:
         port: 80/tcp
