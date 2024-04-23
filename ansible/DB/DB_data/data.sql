@@ -20,9 +20,9 @@ CREATE TABLE IF NOT EXISTS USER (
 -- );
 -- 사용자(User) 테이블에 데이터 삽입
 INSERT INTO USER (UserID, Name, ResidentRegistrationNumber, ContactNumber, Address, Email)
-    VALUES (3, '장발장', '123456-1234567', '01012345678', '서울시 강남구', 'bal@gmail.com'),
-    (5, '장손장', '101010-2222222', '01022223333', '경기도 남양주시', 'son@gmail.com'),
-    (6, '장눈장', '123456-5656565', '01099991111', '대전시 유성구', 'noon@naver.com');
+    VALUES (1, '장발장', '123456-1234567', '01012345678', '서울시 강남구', 'bal@gmail.com'),
+    (2, '장손장', '101010-2222222', '01022223333', '경기도 남양주시', 'son@gmail.com'),
+    (3, '장눈장', '123456-5656565', '01099991111', '대전시 유성구', 'noon@naver.com');
 
 -- -- 복무 현황(ServiceStatus) 테이블에 데이터 삽입
 -- -- 예시 데이터, 실제 데이터에 맞게 수정 필요
