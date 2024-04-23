@@ -4,10 +4,14 @@ run-name: ${{ github.actor }} is running vagrant up 🚀
 on:
   pull_request:
     paths:
-      - ansible/*
-      - docker/*
-      - scripts/*
+      - ansible/**
+      - docker/**
+      - scripts/**
       - Vagrantfile
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   vagrant-up:
