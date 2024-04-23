@@ -56,13 +56,7 @@
           - "80:80"
         env:
           WAS_IP: "{{ was_ip }}"
-
-    - name: Start firewall daemon
-      service:
-        name: firewalld
-        state: started
-        enabled: yes
-
+          
     - name: Open port 80
       firewalld:
         port: 80/tcp
