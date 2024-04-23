@@ -9,6 +9,10 @@ on:
       - scripts/*
       - Vagrantfile
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   vagrant-up:
     if: github.actor != 'restyled-io[bot]'
