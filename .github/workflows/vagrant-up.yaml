@@ -4,9 +4,9 @@ run-name: ${{ github.actor }} is running vagrant up 🚀
 on:
   pull_request:
     paths:
-      - ansible/*
-      - docker/*
-      - scripts/*
+      - ansible/**
+      - docker/**
+      - scripts/**
       - Vagrantfile
 
 jobs:
