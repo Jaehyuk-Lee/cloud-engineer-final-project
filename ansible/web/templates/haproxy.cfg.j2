@@ -2,7 +2,7 @@ global
     log /dev/log    local0
     log /dev/log    local1 notice
     chroot /var/lib/haproxy
-    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats socket /run/haproxy/admin.sock mode 777 level admin
     stats timeout 30s
     user haproxy
     group haproxy
@@ -30,5 +30,6 @@ backend http_back
 
 backend WAS_back
     balance roundrobin
-    server WAS-01 192.168.111.21:3000 check
-    server WAS-02 192.168.111.22:3000 check
+{% for i in range(1, 3) %}
+    server WAS-{{ "%02d"|format(i) }} 192.168.111.{{ 20 + i }}:3000 check
+{% endfor %}
