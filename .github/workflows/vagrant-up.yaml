@@ -25,7 +25,7 @@ jobs:
       - name: add Network /etc/vbox/networks.conf
         run: |
           sudo mkdir -p /etc/vbox && \
-          echo '* 192.168.111.0/24' > ~/networks.conf && \
+          echo '* "192.168.111.0/24' > ~/networks.conf && \
           sudo mv ~/networks.conf /etc/vbox/networks.conf
 
       - name: Cache Vagrant boxes
