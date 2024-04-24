@@ -1,7 +1,41 @@
+# ---
+# - name: Install Nginx in Docker container
+#   hosts: web
+#   become: yes
+#   tasks:
+#     - name: Pull Nginx image
+#       docker_image:
+#         name: ghcr.io/jaehyuk-lee/nginx-container-registry
+#         tag: release
+#         source: pull
+
+#     - name: Run Nginx container
+#       docker_container:
+#         name: my-nginx-container
+#         image: ghcr.io/jaehyuk-lee/nginx-container-registry:release
+#         state: started
+#         ports:
+#           - "80:80"
+
+#     - name: Start firewall daemon
+#       service:
+#         name: firewalld
+#         state: started
+#         enabled: yes
+
+#     - name: Open port 80
+#       firewalld:
+#         port: 80/tcp
+#         permanent: yes
+#         state: enabled
+#         immediate: yes
+
 ---
 - name: Install Nginx in Docker container
   hosts: web
   become: yes
+  vars:
+    starting_ip: 21 # 첫 번째 웹 서버의 IP 주소 마지막 숫자
   tasks:
     - name: Pull Nginx image
       docker_image:
@@ -9,10 +43,23 @@
         tag: release
         source: pull
 
-    - name: Run Nginx container
+    - name: Calculate WAS_IP for this web server
+      set_fact:
+        was_ip: "192.168.111.{{ starting_ip + play_hosts.index(inventory_hostname) }}"
+
+    - name: Run Nginx container with WAS_IP environment variable
       docker_container:
         name: my-nginx-container
         image: ghcr.io/jaehyuk-lee/nginx-container-registry:release
         state: started
         ports:
           - "80:80"
+        env:
+          WAS_IP: "{{ was_ip }}"
+
+    - name: Open port 80
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
