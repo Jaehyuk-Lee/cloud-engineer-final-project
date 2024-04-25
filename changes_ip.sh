@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Vagrant IP 대역 변경
-new_private_network="192.168.111"
+new_private_network="$1"
 sed -i "s/cfg\.vm\.network \"private_network\", ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./cfg.vm.network \"private_network\", ip: \"$new_private_network\./g" Vagrantfile
 
 # update_invetory.hosts.yaml IP 대역 변경
@@ -16,9 +16,6 @@ sed -i "s/was_ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./was_ip: \"$new_pr
 # haproxy.cfg.j2 IP 대역 변경
 sed -i "s/server web-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./server web-{{ \"%02d\"|format(i) }} $new_private_network./g" ansible/web/templates/haproxy.cfg.j2
 sed -i "s/server WAS-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./server WAS-{{ \"%02d\"|format(i) }} $new_private_network./g" ansible/web/templates/haproxy.cfg.j2
-
-# vagrant-up.yaml IP 대역 변경
-sed -i "s/echo '\* \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24'/echo '\* \"$new_private_network\.0\/24'/g" .github/workflows/vagrant-up.yaml
 
 # ansible\DB\tasks\install.yaml IP 대역 변경
 sed -i "s/host: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/host: \"$new_private_network\.0\/24\"/g" ansible/DB/tasks/install.yaml
