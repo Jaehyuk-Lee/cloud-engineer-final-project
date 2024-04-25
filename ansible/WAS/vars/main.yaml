@@ -1,0 +1,9 @@
+---
+was_repo: ghcr.io/jaehyuk-lee/nodejs-container-registry
+was_tag: release
+was_container_name: my-node-container
+# 컨테이너에서 포트를 1개 초과해서 사용하는 경우 포트를 리스트로 추가해주면 됨
+# 형식: '<host port>:<container port>'
+was_port:
+  - 3000:3000
+#  - 8080:80 # example
