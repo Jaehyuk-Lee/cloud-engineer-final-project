@@ -8,20 +8,20 @@
     gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
     enabled: yes
 
-- name: Install epel-release, python mysql support library and MariaDB client
+- name: Install epel-release, python mysql support library, MariaDB server and client
   yum:
     name:
       - epel-release
       - MySQL-python
+      - MariaDB-server
       - MariaDB-client
     state: latest
 
-- name: Install MariaDB server
-  yum:
-    name: MariaDB-server
-    state: latest
-  notify:
-    - Start MariaDB server
+- name: Start MariaDB server
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
 
 - name: Update mysql root password
   mysql_user:
