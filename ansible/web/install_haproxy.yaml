@@ -1,7 +1,20 @@
 - name: Configure HAProxy server
   hosts: haproxy
   become: true
+
   tasks:
+    - name: Install policycoreutils-python
+      yum:
+        name: policycoreutils-python
+        state: present
+
+    - name: Add SELinux port for HAProxy
+      seport:
+        ports: 3000
+        proto: tcp
+        setype: http_port_t
+        state: present
+
     - name: Install HAProxy
       yum:
         name: haproxy
@@ -13,7 +26,7 @@
         state: directory
         owner: haproxy
         group: haproxy
-        mode: '0755'
+        mode: "0660"
 
     - name: Copy HAProxy configuration file
       template:
