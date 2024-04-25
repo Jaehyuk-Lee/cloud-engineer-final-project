@@ -1,39 +1,27 @@
 ---
-- name: install epel-release
+- name: Add MariaDB repository
+  yum_repository:
+    name: MariaDB
+    description: MariaDB 10.5 Repository
+    baseurl: http://yum.mariadb.org/10.5/centos7-amd64
+    gpgcheck: yes
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    enabled: yes
+
+- name: install epel-release, python mysql support library, MariaDB server and client
   yum:
-    name: epel-release
-    state: latest
-
-# - name: install mysql server
-#   action: "{{ ansible_pkg_mgr }} name=mariadb-server state=present"
-
-# - name: Update system packages
-#   yum:
-#     name: "*"
-#     state: latest
-
-- name: install python mysql support library
-  action: "{{ ansible_pkg_mgr }} name=MySQL-python state=latest"
-
-- name: Install MariaDB server and client
-  package:
     name:
+      - epel-release
+      - MySQL-python
       - MariaDB-server
       - MariaDB-client
-    state: present
+    state: latest
 
-# - name: Run sudo yum install python3-pip
-#   expect:
-#     command: sudo yum install python3-pip
-
-- name: start mysql server
-  action: service name=mariadb state=started enabled=true
-
-# - name: Run mysql_secure_installation
-#   expect:
-#     command: sudo mysql_secure_installation
-#     responses:
-#       ".*": 'yes\n'
+- name: start MariaDB server
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
 
 - name: update mysql root password
   mysql_user:
@@ -80,3 +68,31 @@
   with_items:
     - "192.168.111.0/24"
     - "%"
+
+- name: Backup existing my.cnf file
+  command: cp /etc/my.cnf /etc/my.bak
+  args:
+    creates: /etc/server.cnf.bak
+  failed_when: false
+- name: cp my.cnf file
+  command: cp /home/vagrant/my.cnf /etc/my.cnf
+
+- name: Restart MySQL service
+  service:
+    name: mariadb.service
+    state: restarted
+
+- name: Create a new database
+  mysql_db:
+    login_user: myuser
+    login_password: "{{ mysql_user_password }}"
+    name: wbdb
+    state: present
+
+- name: Insert data into mytable
+  mysql_db:
+    login_user: myuser
+    login_password: "{{ mysql_user_password }}"
+    name: wbdb
+    state: import
+    target: /home/vagrant/data.sql
