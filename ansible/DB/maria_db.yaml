@@ -4,10 +4,14 @@
   vars_files:
     - vars/main.yaml
   tasks:
-    - name: cp MaiaDB.repo file
-      command: cp /home/vagrant/MariaDB.repo /etc/yum.repos.d/MariaDB.repo
-
-    - include: tasks/install.yaml
+    - name: Add MariaDB repository
+      yum_repository:
+        name: MariaDB
+        description: MariaDB 10.5 Repository
+        baseurl: http://yum.mariadb.org/10.5/centos7-amd64
+        gpgcheck: yes
+        gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+        enabled: yes
 
     - name: Backup existing my.cnf file
       command: cp /etc/my.cnf /etc/my.bak
