@@ -8,22 +8,22 @@
     gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
     enabled: yes
 
-- name: install epel-release, python mysql support library, MariaDB server and client
+- name: Install epel-release, python mysql support library and MariaDB client
   yum:
     name:
       - epel-release
       - MySQL-python
-      - MariaDB-server
       - MariaDB-client
     state: latest
 
-- name: start MariaDB server
-  service:
-    name: mariadb
-    state: started
-    enabled: yes
+- name: Install MariaDB server
+  yum:
+    name: MariaDB-server
+    state: latest
+  notify:
+    - Start MariaDB server
 
-- name: update mysql root password
+- name: Update mysql root password
   mysql_user:
     login_user: root
     login_password: "{{ mysql_root_password }}"
@@ -60,7 +60,7 @@
   mysql_user:
     login_user: root
     login_password: "{{ mysql_root_password }}"
-    name: myuser
+    name: "{{ mysql_user }}"
     password: "{{ mysql_user_password }}"
     priv: "wbdb.*:ALL"
     host: "{{ item }}"
@@ -79,20 +79,20 @@
 
 - name: Restart MySQL service
   service:
-    name: mariadb.service
+    name: mariadb
     state: restarted
 
 - name: Create a new database
   mysql_db:
-    login_user: myuser
+    login_user: "{{ mysql_user }}"
     login_password: "{{ mysql_user_password }}"
-    name: wbdb
+    name: "{{ mysql_user_db_name }}"
     state: present
 
-- name: Insert data into mytable
+- name: Insert data
   mysql_db:
-    login_user: myuser
+    login_user: "{{ mysql_user }}"
     login_password: "{{ mysql_user_password }}"
-    name: wbdb
+    name: "{{ mysql_user_db_name }}"
     state: import
     target: /home/vagrant/data.sql

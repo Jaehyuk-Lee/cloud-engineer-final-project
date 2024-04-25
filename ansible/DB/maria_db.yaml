@@ -5,3 +5,5 @@
     - vars/main.yaml
   tasks:
     - include: tasks/install.yaml
+  handlers:
+    - include: handlers/main.yaml
