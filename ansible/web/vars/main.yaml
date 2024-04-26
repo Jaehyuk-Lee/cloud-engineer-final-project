@@ -5,7 +5,6 @@ web_image_tag: release
 web_container_name: my-nginx-container
 web_port:
   - 80:80
-starting_ip: 21 # 첫 번째 웹 서버의 IP 주소 마지막 숫자
 
 # install_haproxy.yaml 변수 설정
 haproxy_port: 3000
