@@ -1,5 +1,6 @@
 ---
-- name: start nginx web server
-  action: service name=nginx state=started
-- name: restart nginx web server
-  action: service name=nginx state=restarted
+- name: Restart MariaDB server
+  service:
+    name: mariadb
+    state: restarted
+    enabled: yes
