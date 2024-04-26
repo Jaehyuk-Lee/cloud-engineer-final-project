@@ -46,23 +46,13 @@
     host_all: yes
     state: absent
 
-- name: create a new user
+- name: Create a new user and grant privileges for database creation
   mysql_user:
     login_user: root
     login_password: "{{ mysql_root_password }}"
     name: "{{ mysql_user }}"
     password: "{{ mysql_user_password }}"
     priv: "{{ mysql_user_db_name }}.*:ALL,GRANT"
-    host: "192.168.111.0/24"
-    state: present
-
-- name: Grant privileges to the user for database creation
-  mysql_user:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: "{{ mysql_user }}"
-    password: "{{ mysql_user_password }}"
-    priv: "wbdb.*:ALL"
     host: "{{ item }}"
     state: present
   with_items:
