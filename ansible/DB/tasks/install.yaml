@@ -68,6 +68,12 @@
     state: present
   register: create_db
 
+- name: Copy SQL file to the target server
+  template:
+    src: "templates/data.sql.j2"
+    dest: "/home/vagrant/data.sql"
+  register: sql_copy_result
+
 - name: Insert initial data
   mysql_db:
     login_user: "{{ mysql_user }}"
@@ -75,10 +81,10 @@
     name: "{{ mysql_user_db_name }}"
     encoding: "{{ mysql_encoding }}"
     state: import
-    target: /home/vagrant/data.sql
+    target: "{{ sql_copy_result.dest }}"
   when: create_db.changed == true
 
-- name: Temporary backup existing configuration file
+- name: Temporary backup existing configuration files
   command: "cp /etc/{{ item }} /etc/{{ item }}.bak"
   with_items:
     - my.cnf
