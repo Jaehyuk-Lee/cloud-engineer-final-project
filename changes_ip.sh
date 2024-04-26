@@ -20,6 +20,3 @@ sed -i "s/server WAS-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\
 # ansible\DB\tasks\install.yaml IP 대역 변경
 sed -i "s/host: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/host: \"$new_private_network\.0\/24\"/g" ansible/DB/tasks/install.yaml
 sed -i "s/- \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/- \"$new_private_network\.0\/24\"/g" ansible/DB/tasks/install.yaml
-
-# DB/templates/my.cnf.j2 IP 대역 변경
-sed -i "s/bind-address            = [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./bind-address            = $new_private_network./g" ansible/DB/templates/my.cnf.j2
