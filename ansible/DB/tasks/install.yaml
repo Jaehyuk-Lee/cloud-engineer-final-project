@@ -59,30 +59,54 @@
     - "192.168.111.0/24"
     - "%"
 
-- name: Backup existing my.cnf file
-  command: cp /etc/my.cnf /etc/my.bak
-  args:
-    creates: /etc/server.cnf.bak
-  failed_when: false
-- name: cp my.cnf file
-  command: cp /home/vagrant/my.cnf /etc/my.cnf
-
-- name: Restart MySQL service
-  service:
-    name: mariadb
-    state: restarted
-
 - name: Create a new database
   mysql_db:
     login_user: "{{ mysql_user }}"
     login_password: "{{ mysql_user_password }}"
     name: "{{ mysql_user_db_name }}"
+    encoding: "{{ mysql_encoding }}"
     state: present
+  register: create_db
 
-- name: Insert data
+- name: Insert initial data
   mysql_db:
     login_user: "{{ mysql_user }}"
     login_password: "{{ mysql_user_password }}"
     name: "{{ mysql_user_db_name }}"
+    encoding: "{{ mysql_encoding }}"
     state: import
     target: /home/vagrant/data.sql
+  when: create_db.changed == true
+
+- name: Temporary backup existing configuration file
+  command: "cp /etc/{{ item }} /etc/{{ item }}.bak"
+  with_items:
+    - my.cnf
+  failed_when: false
+  register: tmp_backup
+
+- name: Copy MariaDB configuration files
+  template:
+    src: "templates/{{ item.item }}.j2"
+    dest: "/etc/{{ item.item }}"
+  with_items: "{{ tmp_backup.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  register: copy_result
+
+- name: Keep backup configuration files
+  command: "mv /etc/{{ item.item.item }}.bak /etc/{{ item.item.item }}.{{ ansible_date_time.iso8601_basic_short }}.bak"
+  with_items: "{{ copy_result.results }}"
+  loop_control:
+    label: "{{ item.item.item }}"
+  notify: Restart MariaDB server
+  when: item.changed == true
+
+- name: Remove unneeded backup files
+  file:
+    path: "/etc/{{ item.item.item }}.bak"
+    state: absent
+  with_items: "{{ copy_result.results }}"
+  loop_control:
+    label: "{{ item.item.item }}"
+  when: item.changed != true
