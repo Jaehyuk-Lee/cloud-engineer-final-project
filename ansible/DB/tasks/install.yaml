@@ -94,7 +94,7 @@
 
 - name: Copy MariaDB configuration files
   template:
-    src: "templates/{{ item.item }}.j2"
+    src: "templates/conf/{{ item.item }}.j2"
     dest: "/etc/{{ item.item }}"
   with_items: "{{ tmp_backup.results }}"
   loop_control:
