@@ -46,7 +46,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       cfg.vm.host_name="WAS-#{format("%02d", i)}"
       cfg.vm.synced_folder ".", "/vagrant", disabled: true
       cfg.vm.network "private_network", ip: "192.168.111.#{i+20}"
-      cfg.vm.network "forwarded_port", guest: 22, host: 19221 + i, auto_correct: false, id: "ssh"
+      cfg.vm.network "forwarded_port", guest: 22, host: 19220 + i, auto_correct: false, id: "ssh"
       cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     end
   end
