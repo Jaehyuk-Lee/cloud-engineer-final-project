@@ -8,16 +8,16 @@
     - vars/main.yaml
 
   tasks:
-    - name: Pull Node.js image
+    - name: Pull WAS image
       docker_image:
-        name: "{{ was_repo }}"
-        tag: "{{ was_tag }}"
+        name: "{{ was_image_url }}"
+        tag: "{{ was_image_tag }}"
         source: pull
 
-    - name: Run Node.js container
+    - name: Run WAS container
       docker_container:
         name: "{{ was_container_name }}"
-        image: "{{ was_repo }}:{{ was_tag }}"
+        image: "{{ was_image_url }}:{{ was_image_tag }}"
         state: started
         ports: "{{ was_port }}"
 
