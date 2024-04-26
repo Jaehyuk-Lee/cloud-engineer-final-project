@@ -46,7 +46,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       cfg.vm.host_name="WAS-#{format("%02d", i)}"
       cfg.vm.synced_folder ".", "/vagrant", disabled: true
       cfg.vm.network "private_network", ip: "192.168.111.#{i+20}"
-      cfg.vm.network "forwarded_port", guest: 22, host: 19221 + i, auto_correct: false, id: "ssh"
+      cfg.vm.network "forwarded_port", guest: 22, host: 19220 + i, auto_correct: false, id: "ssh"
       cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
     end
   end
@@ -65,11 +65,6 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.network "forwarded_port", guest: 22, host: 19231, auto_correct: false, id: "ssh"
     cfg.vm.network "forwarded_port", guest: 3306, host: 13306, auto_correct: false, id: "mysql"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
-    cfg.vm.provision "file", source: "ansible/DB/DB_data/data.sql", destination: "data.sql"
-    cfg.vm.provision "file", source: "ansible/DB/DB_data/MariaDB.repo", destination: "MariaDB.repo"
-    # cfg.vm.provision "file", source: "ansible/DB/DB_data/mysql-clients.cnf", destination: "mysql-clients.cnf"
-    # cfg.vm.provision "file", source: "ansible/DB/DB_data/server.cnf", destination: "server.cnf"
-    cfg.vm.provision "file", source: "ansible/DB/DB_data/my.cnf", destination: "my.cnf"
 
     cfg.vm.provision "shell", inline: <<-SHELL
       sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
