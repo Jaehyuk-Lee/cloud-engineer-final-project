@@ -9,12 +9,11 @@
   tasks:
     - name: Install yum-utils, device-mapper-persistent-data, lvm2 package
       yum:
-        name: "{{ item }}"
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
         state: present
-      loop:
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
 
     - name: Add Docker repository
       yum_repository:
@@ -43,11 +42,10 @@
     # Requirements to use Docker with Ansible
     - name: Install EPEL repository, pip package
       yum:
-        name: "{{ item }}"
+        name:
+          - epel-release
+          - python-pip
         state: present
-      loop:
-        - epel-release
-        - python-pip
 
     - name: Upgrade pip
       pip:
