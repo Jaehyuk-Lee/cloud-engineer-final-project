@@ -34,13 +34,13 @@
 - name: Install Nginx in Docker container
   hosts: web
   become: yes
-  vars:
-    starting_ip: 21 # 첫 번째 웹 서버의 IP 주소 마지막 숫자
+  vars_files:
+    - vars/main.yaml
   tasks:
     - name: Pull Nginx image
       docker_image:
-        name: ghcr.io/jaehyuk-lee/nginx-container-registry
-        tag: release
+        name: "{{ web_image_url }}"
+        tag: "{{ web_image_tag }}"
         source: pull
 
     - name: Calculate WAS_IP for this web server
@@ -49,17 +49,17 @@
 
     - name: Run Nginx container with WAS_IP environment variable
       docker_container:
-        name: my-nginx-container
-        image: ghcr.io/jaehyuk-lee/nginx-container-registry:release
+        name: "{{ web_container_name }}"
+        image: "{{ web_image_url }}:{{ web_image_tag }}"
         state: started
-        ports:
-          - "80:80"
+        ports: "{{web_port}}"
         env:
           WAS_IP: "{{ was_ip }}"
 
     - name: Open port 80
       firewalld:
-        port: 80/tcp
+        port: "{{ item.split(':')[0] }}/tcp"
         permanent: yes
         state: enabled
         immediate: yes
+      loop: "{{ web_port }}"
