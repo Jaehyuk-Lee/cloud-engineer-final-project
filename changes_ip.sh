@@ -1,8 +1,17 @@
 #!/bin/bash
 
+# IP 대역 변수 지정
+new_private_network="${1:-10.10.10}"
+
+# 예외 처리
+if ! [[ $new_private_network =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+  echo "올바른 IP 주소 형식이 아닙니다, ###.###.### 형식으로 입력해주세요"
+  exit 1
+fi
+
 # Vagrantfile IP 대역 변경
-new_private_network="$1"
 sed -i "s/cfg\.vm\.network \"private_network\", ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./cfg.vm.network \"private_network\", ip: \"$new_private_network\./g" Vagrantfile
+
 
 # env/update_invetory.hosts.yaml IP 대역 변경
 sed -i "s/host_ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./host_ip: \"$new_private_network\./g" ansible/env/update_inventory_hosts.yaml
