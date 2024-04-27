@@ -12,7 +12,6 @@ fi
 # Vagrantfile IP 대역 변경
 sed -i "s/cfg\.vm\.network \"private_network\", ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./cfg.vm.network \"private_network\", ip: \"$new_private_network\./g" Vagrantfile
 
-
 # env/update_invetory.hosts.yaml IP 대역 변경
 sed -i "s/host_ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./host_ip: \"$new_private_network\./g" ansible/env/update_inventory_hosts.yaml
 sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.2/$new_private_network\.2/g" ansible/env/update_inventory_hosts.yaml
