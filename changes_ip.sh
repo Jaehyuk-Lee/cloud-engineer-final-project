@@ -4,7 +4,7 @@
 new_private_network="${1:-10.10.10}"
 
 # 예외 처리
-if ! [[ $new_private_network =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+if ! [[ "$new_private_network" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
   echo "올바른 IP 주소 형식이 아닙니다, ###.###.### 형식으로 입력해주세요"
   exit 1
 fi

@@ -4,7 +4,7 @@
 end_number=${1:-1} # 인수가 없을 경우 기본값은 1
 j2_end_number=$((end_number + 1))
 
-if ! [[ $end_number =~ ^[0-9]+$ && $end_number -ge 1 && $end_number -le 10 ]]; then
+if ! [[ "$end_number" =~ ^[0-9]+$ && "$end_number" -ge 1 && "$end_number" -le 10 ]]; then
   echo "1부터 10 사이의 숫자를 입력해주세요"
   exit 1
 fi
