@@ -88,7 +88,6 @@
   command: "cp /etc/{{ item }} /etc/{{ item }}.bak"
   with_items:
     - my.cnf
-    - my.cnf.d/server.cnf
   failed_when: false
   register: tmp_backup
 
