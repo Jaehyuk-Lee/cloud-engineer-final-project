@@ -2,7 +2,6 @@
 # vars file for mysql
 mysql_collation: utf8mb4_unicode_ci
 mysql_encoding: utf8mb4
-mysql_bind_address: 192.168.111.2
 mysql_max_connections: 200
 mysql_root_password: mypassword
 mysql_user_db_name: wbdb
