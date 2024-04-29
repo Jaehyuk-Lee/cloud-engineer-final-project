@@ -14,8 +14,9 @@
       register: keyscan
 
     - name: Add host key to known_hosts
-      lineinfile: name=~/.ssh/known_hosts
-        create=yes
-        line={{ item }}
+      lineinfile:
+        dest: ~/.ssh/known_hosts
+        line: "{{ item }}"
+        create: yes
       with_items:
         - "{{ keyscan.stdout_lines }}"
