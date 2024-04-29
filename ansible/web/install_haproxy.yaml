@@ -1,7 +1,8 @@
 - name: Configure HAProxy server
   hosts: haproxy
   become: true
-
+  vars_files:
+    - vars/main.yaml
   tasks:
     - name: Install policycoreutils-python
       yum:
@@ -10,7 +11,7 @@
 
     - name: Add SELinux port for HAProxy
       seport:
-        ports: 3000
+        ports: "{{ haproxy_port }}"
         proto: tcp
         setype: http_port_t
         state: present
@@ -22,7 +23,7 @@
 
     - name: Create directory for HAProxy stats socket
       file:
-        path: /run/haproxy
+        path: "{{ haproxy_stats_dir }}"
         state: directory
         owner: haproxy
         group: haproxy
@@ -30,8 +31,8 @@
 
     - name: Copy HAProxy configuration file
       template:
-        src: templates/haproxy.cfg.j2
-        dest: /etc/haproxy/haproxy.cfg
+        src: "{{ haproxy_config_src }}"
+        dest: "{{ haproxy_config_dest }}"
       notify: Restart HAProxy
 
   handlers:

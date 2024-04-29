@@ -1,41 +1,29 @@
 ---
-- name: install epel-release
+- name: Add MariaDB repository
+  yum_repository:
+    name: MariaDB
+    description: MariaDB 10.5 Repository
+    baseurl: http://yum.mariadb.org/10.5/centos7-amd64
+    gpgcheck: yes
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    enabled: yes
+
+- name: Install epel-release, python mysql support library, MariaDB server and client
   yum:
-    name: epel-release
-    state: latest
-
-# - name: install mysql server
-#   action: "{{ ansible_pkg_mgr }} name=mariadb-server state=present"
-
-# - name: Update system packages
-#   yum:
-#     name: "*"
-#     state: latest
-
-- name: install python mysql support library
-  action: "{{ ansible_pkg_mgr }} name=MySQL-python state=latest"
-
-- name: Install MariaDB server and client
-  package:
     name:
+      - epel-release
+      - MySQL-python
       - MariaDB-server
       - MariaDB-client
-    state: present
+    state: latest
 
-# - name: Run sudo yum install python3-pip
-#   expect:
-#     command: sudo yum install python3-pip
+- name: Start MariaDB server
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
 
-- name: start mysql server
-  action: service name=mariadb state=started enabled=true
-
-# - name: Run mysql_secure_installation
-#   expect:
-#     command: sudo mysql_secure_installation
-#     responses:
-#       ".*": 'yes\n'
-
-- name: update mysql root password
+- name: Update mysql root password
   mysql_user:
     login_user: root
     login_password: "{{ mysql_root_password }}"
@@ -58,25 +46,73 @@
     host_all: yes
     state: absent
 
-- name: create a new user
+- name: Create a new user and grant privileges for database creation
   mysql_user:
     login_user: root
     login_password: "{{ mysql_root_password }}"
     name: "{{ mysql_user }}"
     password: "{{ mysql_user_password }}"
     priv: "{{ mysql_user_db_name }}.*:ALL,GRANT"
-    host: "192.168.111.0/24"
-    state: present
-
-- name: Grant privileges to the user for database creation
-  mysql_user:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: myuser
-    password: "{{ mysql_user_password }}"
-    priv: "wbdb.*:ALL"
     host: "{{ item }}"
     state: present
   with_items:
     - "192.168.111.0/24"
     - "%"
+
+- name: Create a new database
+  mysql_db:
+    login_user: "{{ mysql_user }}"
+    login_password: "{{ mysql_user_password }}"
+    name: "{{ mysql_user_db_name }}"
+    encoding: "{{ mysql_encoding }}"
+    state: present
+  register: create_db
+
+- name: Copy SQL file to the target server
+  template:
+    src: "templates/data.sql.j2"
+    dest: "/home/vagrant/data.sql"
+  register: sql_copy_result
+
+- name: Insert initial data
+  mysql_db:
+    login_user: "{{ mysql_user }}"
+    login_password: "{{ mysql_user_password }}"
+    name: "{{ mysql_user_db_name }}"
+    encoding: "{{ mysql_encoding }}"
+    state: import
+    target: "{{ sql_copy_result.dest }}"
+  when: create_db.changed == true
+
+- name: Temporary backup existing configuration files
+  command: "cp /etc/{{ item }} /etc/{{ item }}.bak"
+  with_items:
+    - my.cnf
+  failed_when: false
+  register: tmp_backup
+
+- name: Copy MariaDB configuration files
+  template:
+    src: "templates/conf/{{ item.item }}.j2"
+    dest: "/etc/{{ item.item }}"
+  with_items: "{{ tmp_backup.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  register: copy_result
+
+- name: Keep configuration backup files
+  command: "mv /etc/{{ item.item.item }}.bak /etc/{{ item.item.item }}.{{ ansible_date_time.iso8601_basic_short }}.bak"
+  with_items: "{{ copy_result.results }}"
+  loop_control:
+    label: "{{ item.item.item }}"
+  notify: Restart MariaDB server
+  when: item.changed == true
+
+- name: Remove unneeded backup files
+  file:
+    path: "/etc/{{ item.item.item }}.bak"
+    state: absent
+  with_items: "{{ copy_result.results }}"
+  loop_control:
+    label: "{{ item.item.item }}"
+  when: item.changed != true
