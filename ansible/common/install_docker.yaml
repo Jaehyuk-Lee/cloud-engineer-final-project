@@ -7,9 +7,10 @@
   gather_facts: no
 
   tasks:
-    - name: Install yum-utils, device-mapper-persistent-data, lvm2 package
+    - name: Install EPEL repository, yum-utils, device-mapper-persistent-data, lvm2 package
       yum:
         name:
+          - epel-release
           - yum-utils
           - device-mapper-persistent-data
           - lvm2
@@ -39,12 +40,10 @@
         - firewalld
         - docker
 
-    # Requirements to use Docker with Ansible
-    - name: Install EPEL repository, pip package
+    # Requirements to use Docker with Ansible, requires EPEL-release to install python-pip
+    - name: Install pip package
       yum:
-        name:
-          - epel-release
-          - python-pip
+        name: python-pip
         state: present
 
     - name: Upgrade pip
