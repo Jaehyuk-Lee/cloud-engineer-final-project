@@ -12,6 +12,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       vb.customize ["modifyvm", :id, "--memory", 1024]
     end
     cfg.vm.hostname = "haproxy-server"
+    cfg.vm.synced_folder ".", "/vagrant", disabled: true
     cfg.vm.network "private_network", ip: "192.168.111.100"
     cfg.vm.network "forwarded_port", guest: 22, host: 19300, auto_correct: false, id: "ssh"
     cfg.vm.provision "shell", path: "scripts/bash_ssh_conf_CentOS.sh"
