@@ -14,12 +14,20 @@
         tag: "{{ was_image_tag }}"
         source: pull
 
+    - name: Make env file
+      lineinfile:
+        dest: ~/docker-env.list
+        line: "{{ item }}"
+        create: yes
+      loop: "{{ env }}"
+
     - name: Run WAS container
       docker_container:
         name: "{{ was_container_name }}"
         image: "{{ was_image_url }}:{{ was_image_tag }}"
         state: started
         ports: "{{ was_port }}"
+        env_file: "~/docker-env.list"
 
     - name: Open WAS port
       firewalld:

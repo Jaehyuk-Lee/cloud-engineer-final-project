@@ -7,3 +7,9 @@ was_container_name: my-node-container
 was_port:
   - 3000:3000
 #  - 8080:80 # example
+env:
+  - DB_IP=192.168.111.31
+  - USER_NAME=myuser
+  - USER_PASSWORD=mypassword!
+  - DATABASE_NAME=wbdb
+  - TABLE_NAME=USER
