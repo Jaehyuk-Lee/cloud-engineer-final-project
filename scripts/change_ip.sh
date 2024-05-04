@@ -1,14 +1,13 @@
 #!/bin/bash
 
 # IP 대역 변수 지정
+# 기본값은 192.168.111
 new_private_network="${1:-192.168.111}"
 # 예외 처리
 if ! [[ "$new_private_network" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
   echo "올바른 IP 주소 형식이 아닙니다, ###.###.### 형식으로 입력해주세요"
   exit 1
 fi
-echo $new_private_network
-exit 0
 
 # ansible 디렉토리로 이동
 cd /home/vagrant/ansible
