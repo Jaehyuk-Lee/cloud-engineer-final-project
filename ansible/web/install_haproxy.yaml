@@ -1,12 +1,15 @@
 - name: Configure HAProxy server
   hosts: haproxy
   become: true
+  gather_facts: false
   vars_files:
     - vars/main.yaml
   tasks:
-    - name: Install policycoreutils-python
+    - name: Install policycoreutils-python and HAProxy
       yum:
-        name: policycoreutils-python
+        name:
+          - policycoreutils-python
+          - haproxy
         state: present
 
     - name: Add SELinux port for HAProxy
@@ -14,11 +17,6 @@
         ports: "{{ haproxy_port }}"
         proto: tcp
         setype: http_port_t
-        state: present
-
-    - name: Install HAProxy
-      yum:
-        name: haproxy
         state: present
 
     - name: Create directory for HAProxy stats socket
