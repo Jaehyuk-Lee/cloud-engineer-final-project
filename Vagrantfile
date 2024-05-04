@@ -7,21 +7,21 @@ require 'yaml'
 current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/config.yaml")
 vagrant_config = configs["configs"]
-web_end = vagrant_config["web"]["web_end"].to_i
-was_end = vagrant_config["was"]["was_end"].to_i
+web_end = vagrant_config["web_end_number"].to_i
+was_end = vagrant_config["was_end_number"].to_i
 
 unless web_end > 0 && web_end <= 10 && was_end > 0 && was_end <= 10
   abort("web_end값과 was_end 값은 1부터 10 사이의 숫자를 입력해주세요")
 end
 
 Vagrant.configure(Vagrant_API_Version) do |config|
-
+  # haproxy-server
   config.vm.define "#{vagrant_config["vm_prefix"]}-haproxy-server" do |cfg|
     cfg.vm.box = "centos/7"
     cfg.vm.provider :virtualbox do |vb|
       vb.name = "#{vagrant_config["vm_prefix"]}-haproxy-server"
-      vb.customize ["modifyvm", :id, "--cpus", 1]
-      vb.customize ["modifyvm", :id, "--memory", 1024]
+      vb.customize ["modifyvm", :id, "--cpus", vagrant_config["spec"]["haproxy"]["cpus"]]
+      vb.customize ["modifyvm", :id, "--memory", vagrant_config["spec"]["haproxy"]["memory"]]
     end
     cfg.vm.hostname = "#{vagrant_config["vm_prefix"]}-haproxy-server"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
@@ -37,8 +37,8 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       cfg.vm.box = "centos/7"
       cfg.vm.provider :virtualbox do |vb|
         vb.name = "#{vagrant_config["vm_prefix"]}-web-#{format("%02d", i)}"
-        vb.customize ["modifyvm", :id, "--cpus", 1]
-        vb.customize ["modifyvm", :id, "--memory", 1024]
+        vb.customize ["modifyvm", :id, "--cpus", vagrant_config["spec"]["web"]["cpus"]]
+        vb.customize ["modifyvm", :id, "--memory", vagrant_config["spec"]["web"]["memory"]]
       end
       cfg.vm.hostname = "#{vagrant_config["vm_prefix"]}-web-#{format("%02d", i)}"
       cfg.vm.synced_folder ".", "/vagrant", disabled: true
@@ -54,8 +54,8 @@ Vagrant.configure(Vagrant_API_Version) do |config|
       cfg.vm.box = "centos/7"
       cfg.vm.provider:virtualbox do |vb|
         vb.name="#{vagrant_config["vm_prefix"]}-WAS-#{format("%02d", i)}"
-        vb.customize ["modifyvm", :id, "--cpus",1]
-        vb.customize ["modifyvm", :id, "--memory",1024]
+        vb.customize ["modifyvm", :id, "--cpus", vagrant_config["spec"]["was"]["cpus"]]
+        vb.customize ["modifyvm", :id, "--memory", vagrant_config["spec"]["was"]["memory"]]
       end
       cfg.vm.host_name="#{vagrant_config["vm_prefix"]}-WAS-#{format("%02d", i)}"
       cfg.vm.synced_folder ".", "/vagrant", disabled: true
@@ -70,8 +70,8 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.box = "centos/7"
     cfg.vm.provider:virtualbox do |vb|
       vb.name="#{vagrant_config["vm_prefix"]}-DB-01"
-      vb.customize ["modifyvm", :id, "--cpus",2]
-      vb.customize ["modifyvm", :id, "--memory",2048]
+      vb.customize ["modifyvm", :id, "--cpus", vagrant_config["spec"]["db"]["cpus"]]
+      vb.customize ["modifyvm", :id, "--memory", vagrant_config["spec"]["db"]["memory"]]
     end
     cfg.vm.host_name="#{vagrant_config["vm_prefix"]}-DB-01"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
@@ -90,6 +90,8 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.box = "centos/7"
     cfg.vm.provider:virtualbox do |vb|
       vb.name="#{vagrant_config["vm_prefix"]}-Ansible-Server"
+      vb.customize ["modifyvm", :id, "--cpus", vagrant_config["spec"]["ansible"]["cpus"]]
+      vb.customize ["modifyvm", :id, "--memory", vagrant_config["spec"]["ansible"]["memory"]]
     end
     cfg.vm.host_name="#{vagrant_config["vm_prefix"]}-ansible-server"
     cfg.vm.synced_folder ".", "/vagrant", disabled: true
