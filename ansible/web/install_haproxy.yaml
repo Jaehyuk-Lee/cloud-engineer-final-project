@@ -11,8 +11,8 @@
     - name: Install policycoreutils-python and HAProxy
       yum:
         name:
-        - policycoreutils-python
-        - haproxy
+          - policycoreutils-python
+          - haproxy
         state: present
 
     - name: Add SELinux port for HAProxy
