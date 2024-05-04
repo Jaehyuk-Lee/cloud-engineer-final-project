@@ -10,7 +10,7 @@ if ! [[ "$new_private_network" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
 fi
 
 # ansible 디렉토리로 이동
-cd /home/vagrant/ansible
+cd /home/vagrant/ansible || exit
 
 # env/update_invetory.hosts.yaml IP 대역 변경
 sed -i "s/host_ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./host_ip: \"$new_private_network\./g" env/update_inventory_hosts.yaml
