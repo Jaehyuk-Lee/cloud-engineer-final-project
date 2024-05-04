@@ -2,6 +2,9 @@
   hosts: haproxy
   become: true
   gather_facts: false
+  vars:
+    web_end_number: 2
+    was_end_number: 2
   vars_files:
     - vars/main.yaml
   tasks:

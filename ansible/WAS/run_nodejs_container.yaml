@@ -3,6 +3,9 @@
   hosts: WAS
   become: true
   gather_facts: no
+  vars:
+    static_env:
+      DB_IP: 192.168.112.31
 
   vars_files:
     - vars/main.yaml
@@ -28,6 +31,7 @@
         state: started
         ports: "{{ was_port }}"
         env_file: "/home/vagrant/docker-env.list"
+        env: "{{ static_env }}"
 
     - name: Open WAS port
       firewalld:

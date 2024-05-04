@@ -1,0 +1,14 @@
+---
+configs:
+  web:
+    web_end: 1
+    web_cpu: 1
+    web_memory: 512
+  was:
+    was_end: 2
+    was_cpu: 1
+    was_memory: 512
+  # IP 대역 중 첫 세 자리를 입력하세요. (예: 192.168.111)
+  ip_band: 192.168.112
+  use_external_DB: false
+  vm_prefix: "project"

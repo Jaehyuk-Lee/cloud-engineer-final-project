@@ -3,12 +3,16 @@
   hosts: localhost
   become: yes
   gather_facts: no
+  vars:
+    web_end_number: 2
+    was_end_number: 2
+
   tasks:
     - name: Add web servers to /etc/hosts
       lineinfile:
         path: /etc/hosts
         line: "{{ host_ip }} web-{{ host_number }}"
-      with_sequence: start=1 end=2
+      with_sequence: "start=1 end={{ web_end_number }}"
       vars:
         host_ip: "192.168.111.{{ 10 + item|int }}"
         host_number: '{{ "%02d"|format(item|int) }}'
@@ -17,7 +21,7 @@
       lineinfile:
         path: /etc/hosts
         line: "{{ host_ip }} WAS-{{ host_number }}"
-      with_sequence: start=1 end=2
+      with_sequence: "start=1 end={{ was_end_number }}"
       vars:
         host_ip: "192.168.111.{{ 20 + item|int }}"
         host_number: '{{ "%02d"|format(item|int) }}'

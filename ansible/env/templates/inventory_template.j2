@@ -1,11 +1,11 @@
 # inventory_template.j2
 
 [web]
-{% for i in range(1, 3) %}
+{% for i in range(1, web_end_number + 1) %}
 web-{{ "%02d"|format(i) }}
 {% endfor %}
 [WAS]
-{% for i in range(1, 3) %}
+{% for i in range(1, was_end_number + 1) %}
 WAS-{{ "%02d"|format(i) }}
 {% endfor %}
 [DB]
