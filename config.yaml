@@ -1,7 +1,7 @@
 ---
 configs:
-  web_end_number: 1
-  was_end_number: 2
+  web_end_number: 2
+  was_end_number: 3
   spec:
     haproxy:
       cpus: 1
