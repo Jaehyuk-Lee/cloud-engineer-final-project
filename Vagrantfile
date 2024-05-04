@@ -103,11 +103,12 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/update_inventory_hosts.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/auto_known_host.yaml", privileged: false
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/auto_authorized_keys.yaml --extra-vars 'ansible_ssh_pass=vagrant'", privileged: false
+    # haproxy
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/haproxy/install_haproxy.yaml", privileged: false
     # common
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/common/install_docker.yaml", privileged: false
     # web
-    cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/install_docker_nginx.yaml", privileged: false
-    cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/install_haproxy.yaml", privileged: false
+    cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/run_nginx_container.yaml", privileged: false
     # WAS
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/WAS/run_nodejs_container.yaml", privileged: false
     # DB

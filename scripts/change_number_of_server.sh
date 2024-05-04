@@ -19,5 +19,5 @@ sed -i 's/web_end_number: [0-9]\{1,2\}/web_end_number: '"$web_end_number"'/g' an
 sed -i 's/was_end_number: [0-9]\{1,2\}/was_end_number: '"$was_end_number"'/g' ansible/env/update_inventory_hosts.yaml
 
 # haproxy backend http_back 수정
-sed -i 's/web_end_number: [0-9]\{1,2\}/web_end_number: '"$web_end_number"'/g' ansible/web/install_haproxy.yaml
-sed -i 's/was_end_number: [0-9]\{1,2\}/was_end_number: '"$was_end_number"'/g' ansible/web/install_haproxy.yaml
+sed -i 's/web_end_number: [0-9]\{1,2\}/web_end_number: '"$web_end_number"'/g' ansible/haproxy/install_haproxy.yaml
+sed -i 's/was_end_number: [0-9]\{1,2\}/was_end_number: '"$was_end_number"'/g' ansible/haproxy/install_haproxy.yaml
