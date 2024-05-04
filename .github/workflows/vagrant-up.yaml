@@ -21,11 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 버추얼 박스에서 192.168.111.0/24 대역의 private network를 허용하기 위한 설정
+      # 버추얼 박스에서 모든 대역의 private network를 허용하기 위한 설정
       - name: add Network /etc/vbox/networks.conf
         run: |
           sudo mkdir -p /etc/vbox && \
-          echo '* 192.168.111.0/24' > ~/networks.conf && \
+          echo '* 0.0.0.0/0' > ~/networks.conf && \
           sudo mv ~/networks.conf /etc/vbox/networks.conf
 
       - name: Cache Vagrant boxes
