@@ -2,7 +2,7 @@ USE {{ mysql_user_db_name }};
 
 -- 사용자(User) 테이블 생성
 CREATE TABLE IF NOT EXISTS USER (
-    UserID int PRIMARY KEY,
+    UserID int PRIMARY KEY NOT NULL AUTO_INCREMENT,
     Name varchar(50),
     ResidentRegistrationNumber varchar(15),
     ContactNumber varchar(14),

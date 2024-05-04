@@ -16,7 +16,7 @@
 
     - name: Make env file
       lineinfile:
-        dest: ~/docker-env.list
+        dest: /home/vagrant/docker-env.list
         line: "{{ item }}"
         create: yes
       loop: "{{ env }}"
@@ -27,7 +27,7 @@
         image: "{{ was_image_url }}:{{ was_image_tag }}"
         state: started
         ports: "{{ was_port }}"
-        env_file: "~/docker-env.list"
+        env_file: "/home/vagrant/docker-env.list"
 
     - name: Open WAS port
       firewalld:

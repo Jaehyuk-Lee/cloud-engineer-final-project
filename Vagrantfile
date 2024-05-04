@@ -95,7 +95,7 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/web/install_haproxy.yaml", privileged: false
     # WAS
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/WAS/run_nodejs_container.yaml", privileged: false
-    # DB-server
+    # DB
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/DB/maria_db.yaml", privileged: false
   end
 end
