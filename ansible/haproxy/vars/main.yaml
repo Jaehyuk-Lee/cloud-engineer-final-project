@@ -1,5 +1,2 @@
 # install_haproxy.yaml 변수 설정
-haproxy_port: 3000
-haproxy_stats_dir: /run/haproxy
-haproxy_config_src: templates/haproxy.cfg.j2
-haproxy_config_dest: /etc/haproxy/haproxy.cfg
+was_port: 3000

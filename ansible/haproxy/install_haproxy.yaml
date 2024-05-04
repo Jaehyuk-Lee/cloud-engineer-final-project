@@ -17,14 +17,14 @@
 
     - name: Add SELinux port for HAProxy
       seport:
-        ports: "{{ haproxy_port }}"
+        ports: "{{ was_port }}"
         proto: tcp
         setype: http_port_t
         state: present
 
     - name: Create directory for HAProxy stats socket
       file:
-        path: "{{ haproxy_stats_dir }}"
+        path: /run/haproxy
         state: directory
         owner: haproxy
         group: haproxy
@@ -32,8 +32,8 @@
 
     - name: Copy HAProxy configuration file
       template:
-        src: "{{ haproxy_config_src }}"
-        dest: "{{ haproxy_config_dest }}"
+        src: templates/haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
       notify: Restart HAProxy
 
   handlers:

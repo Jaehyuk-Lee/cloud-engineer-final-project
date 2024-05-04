@@ -23,11 +23,10 @@ frontend http_front
   default_backend http_back
 
 frontend WAS_front
-  bind *:3000
+  bind *:{{ was_port }}
   default_backend WAS_back
 
 backend http_back
-  mode http
   balance roundrobin
   cookie SERVER insert indirect nocache
 {% for i in range(1, web_end_number + 1) %}
@@ -35,9 +34,7 @@ backend http_back
 {% endfor %}
 
 backend WAS_back
-  mode http
   balance roundrobin
-  cookie SERVER insert indirect nocache
 {% for i in range(1, was_end_number + 1) %}
-  server WAS-{{ "%02d"|format(i) }} 192.168.111.{{ 20 + i }}:3000 check cookie WAS-{{ i }}
+  server WAS-{{ "%02d"|format(i) }} 192.168.111.{{ 20 + i }}:{{ was_port }} check
 {% endfor %}
