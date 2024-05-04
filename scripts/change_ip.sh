@@ -9,25 +9,22 @@ if ! [[ "$new_private_network" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
   exit 1
 fi
 
-# ansible 디렉토리로 이동
-cd /home/vagrant/ansible
+# ansible/env/update_invetory.hosts.yaml IP 대역 변경
+sed -i "s/host_ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./host_ip: \"$new_private_network\./g" ansible/env/update_inventory_hosts.yaml
+sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.2/$new_private_network\.2/g" ansible/env/update_inventory_hosts.yaml
+sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.31/$new_private_network\.31/g" ansible/env/update_inventory_hosts.yaml
+sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.100/$new_private_network\.100/g" ansible/env/update_inventory_hosts.yaml
 
-# env/update_invetory.hosts.yaml IP 대역 변경
-sed -i "s/host_ip: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./host_ip: \"$new_private_network\./g" env/update_inventory_hosts.yaml
-sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.2/$new_private_network\.2/g" env/update_inventory_hosts.yaml
-sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.31/$new_private_network\.31/g" env/update_inventory_hosts.yaml
-sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.100/$new_private_network\.100/g" env/update_inventory_hosts.yaml
+# ansible/web/install_docker_nginx.yaml IP 대역 변경
+sed -i "s/WAS_IP: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./WAS_IP: \"$new_private_network\./g" ansible/web/install_docker_nginx.yaml
 
-# web/install_docker_nginx.yaml IP 대역 변경
-sed -i "s/WAS_IP: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./WAS_IP: \"$new_private_network\./g" web/install_docker_nginx.yaml
+# ansible/web/templates/haproxy.cfg.j2 web, WASIP 대역 변경
+sed -i "s/server web-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./server web-{{ \"%02d\"|format(i) }} $new_private_network./g" ansible/haproxy/templates/haproxy.cfg.j2
+sed -i "s/server WAS-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./server WAS-{{ \"%02d\"|format(i) }} $new_private_network./g" ansible/haproxy/templates/haproxy.cfg.j2
 
-# web/templates/haproxy.cfg.j2 web, WASIP 대역 변경
-sed -i "s/server web-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./server web-{{ \"%02d\"|format(i) }} $new_private_network./g" web/templates/haproxy.cfg.j2
-sed -i "s/server WAS-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./server WAS-{{ \"%02d\"|format(i) }} $new_private_network./g" web/templates/haproxy.cfg.j2
+# ansible/DB/tasks/install.yaml DB IP 대역 변경
+sed -i "s/host: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/host: \"$new_private_network\.0\/24\"/g" ansible/DB/tasks/install.yaml
+sed -i "s/- \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/- \"$new_private_network\.0\/24\"/g" ansible/DB/tasks/install.yaml
 
-# DB/tasks/install.yaml DB IP 대역 변경
-sed -i "s/host: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/host: \"$new_private_network\.0\/24\"/g" DB/tasks/install.yaml
-sed -i "s/- \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/- \"$new_private_network\.0\/24\"/g" DB/tasks/install.yaml
-
-# WAS/vars/main.yaml DB IP 대역 변경
-sed -i "s/- [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.31/- $new_private_network\.31/g" WAS/vars/main.yaml
+# ansible/WAS/vars/main.yaml DB IP 대역 변경
+sed -i "s/- [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.31/- $new_private_network\.31/g" ansible/WAS/vars/main.yaml
