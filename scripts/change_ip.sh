@@ -15,8 +15,8 @@ sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.2/$new_private_network\.2/g"
 sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.31/$new_private_network\.31/g" ansible/env/update_inventory_hosts.yaml
 sed -i "s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.100/$new_private_network\.100/g" ansible/env/update_inventory_hosts.yaml
 
-# ansible/web/install_docker_nginx.yaml IP 대역 변경
-sed -i "s/WAS_IP: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./WAS_IP: \"$new_private_network\./g" ansible/web/install_docker_nginx.yaml
+# ansible/web/run_nginx_container.yaml IP 대역 변경
+sed -i "s/WAS_IP: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./WAS_IP: \"$new_private_network\./g" ansible/web/run_nginx_container.yaml
 
 # ansible/web/templates/haproxy.cfg.j2 web, WASIP 대역 변경
 sed -i "s/server web-{{ \"%02d\"|format(i) }} [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\./server web-{{ \"%02d\"|format(i) }} $new_private_network./g" ansible/haproxy/templates/haproxy.cfg.j2
@@ -27,4 +27,4 @@ sed -i "s/host: \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/host: \"$new
 sed -i "s/- \"[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.0\/24\"/- \"$new_private_network\.0\/24\"/g" ansible/DB/tasks/install.yaml
 
 # ansible/WAS/vars/main.yaml DB IP 대역 변경
-sed -i "s/- [0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.31/- $new_private_network\.31/g" ansible/WAS/vars/main.yaml
+sed -i "s/- DB_IP=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.31/- DB_IP=$new_private_network\.31/g" ansible/WAS/vars/main.yaml

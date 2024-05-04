@@ -99,9 +99,9 @@ Vagrant.configure(Vagrant_API_Version) do |config|
     cfg.vm.network "forwarded_port", guest: 22, host: 19202, auto_correct: false, id: "ssh"
     cfg.vm.provision "file", source: "ansible/", destination: "/home/vagrant/ansible"
     # env
-    cfg.vm.provision "shell", path: "scripts/bootstrap.sh"
     cfg.vm.provision "shell", path: "scripts/change_number_of_server.sh", args: "#{web_end} #{was_end}", privileged: false
     cfg.vm.provision "shell", path: "scripts/change_ip.sh", args: "#{vagrant_config["ip_band"]}", privileged: false
+    cfg.vm.provision "shell", path: "scripts/bootstrap.sh"
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/update_inventory_hosts.yaml"
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/auto_known_host.yaml", privileged: false
     cfg.vm.provision "shell", inline: "ansible-playbook ansible/env/auto_authorized_keys.yaml --extra-vars 'ansible_ssh_pass=vagrant'", privileged: false
