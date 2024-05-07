@@ -1,0 +1,2 @@
+# install_haproxy.yaml 변수 설정
+was_port: 3000

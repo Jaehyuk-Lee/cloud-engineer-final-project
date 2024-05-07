@@ -3,6 +3,10 @@
   hosts: WAS
   become: true
   gather_facts: no
+  # external DB 쓸 때는 아래 설정 적용 안되게 해줄 방법 찾아야 함 (다른 방법으로 우회하던지)
+  vars:
+    static_env:
+      DB_IP: 192.168.112.31
 
   vars_files:
     - vars/main.yaml
@@ -28,6 +32,7 @@
         state: started
         ports: "{{ was_port }}"
         env_file: "/home/vagrant/docker-env.list"
+        env: "{{ static_env }}"
 
     - name: Open WAS port
       firewalld:

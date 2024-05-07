@@ -1,0 +1,24 @@
+---
+configs:
+  web_end_number: 2
+  was_end_number: 3
+  spec:
+    haproxy:
+      cpus: 1
+      memory: 512
+    web:
+      cpus: 1
+      memory: 512
+    was:
+      cpus: 1
+      memory: 512
+    db:
+      cpus: 2
+      memory: 2048
+    ansible:
+      cpus: 1
+      memory: 512
+  # IP 대역 중 첫 세 자리를 입력하세요. (예: 192.168.111)
+  ip_band: 192.168.112
+  use_external_DB: false
+  vm_prefix: "project"

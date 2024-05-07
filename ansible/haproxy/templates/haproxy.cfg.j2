@@ -1,0 +1,40 @@
+global
+  log /dev/log    local0
+  log /dev/log    local1 notice
+  chroot /var/lib/haproxy
+  stats socket /run/haproxy/admin.sock mode 660 level admin
+  stats timeout 30s
+  user haproxy
+  group haproxy
+  daemon
+
+defaults
+  log     global
+  mode    http
+  option  httplog
+  option  dontlognull
+  timeout connect 5000
+  timeout client  50000
+  timeout server  50000
+
+frontend http_front
+  bind *:80
+  stats uri /haproxy?stats
+  default_backend http_back
+
+frontend WAS_front
+  bind *:{{ was_port }}
+  default_backend WAS_back
+
+backend http_back
+  balance roundrobin
+  cookie SERVER insert indirect nocache
+{% for i in range(1, web_end_number + 1) %}
+  server web-{{ "%02d"|format(i) }} 192.168.111.{{ 10 + i }}:80 check cookie web-{{ i }}
+{% endfor %}
+
+backend WAS_back
+  balance roundrobin
+{% for i in range(1, was_end_number + 1) %}
+  server WAS-{{ "%02d"|format(i) }} 192.168.111.{{ 20 + i }}:{{ was_port }} check
+{% endfor %}
